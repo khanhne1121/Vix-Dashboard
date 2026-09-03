@@ -4,180 +4,1757 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vix Community Dashboard</title>
-    <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        /* ========================================
+           RESET & VARIABLES
+        ======================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --bg-hover: #252540;
+            --bg-input: #12121f;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0b8;
+            --text-muted: #6a6a82;
+            --border-color: #2a2a40;
+            --accent: #6c5ce7;
+            --accent-hover: #5a4bd1;
+            --accent-success: #00b894;
+            --accent-danger: #e17055;
+            --accent-warning: #fdcb6e;
+            --accent-info: #74b9ff;
+            --shadow: 0 8px 32px rgba(0,0,0,0.5);
+            --radius: 14px;
+            --radius-sm: 8px;
+            --transition: 0.3s ease;
+            --font: 'Inter', sans-serif;
+            --sidebar-width: 260px;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+        /* ========================================
+           LOGIN OVERLAY
+        ======================================== */
+        .login-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            padding: 20px;
+        }
+        .login-overlay.hidden { display: none; }
+        .login-container {
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            animation: fadeUp 0.6s ease;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .login-brand { margin-bottom: 32px; }
+        .login-brand-icon {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, var(--accent), #a29bfe);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #fff;
+            margin: 0 auto 16px;
+            box-shadow: 0 12px 40px rgba(108, 92, 231, 0.35);
+        }
+        .login-brand h1 {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+        .login-brand p { color: var(--text-secondary); font-size: 15px; }
+        .login-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 40px 32px;
+            box-shadow: var(--shadow);
+        }
+        .login-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
+            margin-bottom: 24px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+        }
+        .login-status i { font-size: 22px; color: var(--accent); }
+        .discord-login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            width: 100%;
+            padding: 16px 24px;
+            background: #5865F2;
+            border: none;
+            border-radius: var(--radius-sm);
+            color: #fff;
+            font-size: 17px;
+            font-weight: 600;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .discord-login-btn:hover {
+            background: #4752c4;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(88, 101, 242, 0.4);
+        }
+        .discord-login-btn:active { transform: translateY(0); }
+        .discord-login-btn i { font-size: 28px; }
+        .login-footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        /* ========================================
+           UNAUTHORIZED OVERLAY
+        ======================================== */
+        .unauthorized-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-primary);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 99998;
+            padding: 20px;
+        }
+        .unauthorized-overlay.show { display: flex; }
+        .unauthorized-container {
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            animation: fadeUp 0.5s ease;
+        }
+        .unauthorized-icon {
+            width: 88px; height: 88px;
+            background: rgba(225, 112, 85, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: var(--accent-danger);
+            margin: 0 auto 16px;
+            border: 2px solid rgba(225, 112, 85, 0.2);
+        }
+        .unauthorized-container h2 {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .unauthorized-container p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+
+        /* ========================================
+           SIDEBAR
+        ======================================== */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: transform var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            min-height: 72px;
+        }
+        .sidebar-brand .icon {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, var(--accent), #a29bfe);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .sidebar-brand .text {
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 11px 16px;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .sidebar-nav a:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .sidebar-nav a.active {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(108, 92, 231, 0.3);
+        }
+        .sidebar-nav a i { width: 20px; font-size: 16px; text-align: center; flex-shrink: 0; }
+        .sidebar-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .status-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        .status-dot.online { background: var(--accent-success); }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ========================================
+           MAIN CONTENT
+        ======================================== */
+        .main-content { margin-left: var(--sidebar-width); min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* ========================================
+           TOPBAR
+        ======================================== */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 28px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 22px;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .topbar h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .topbar-btn {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .topbar-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 4px 16px 4px 4px;
+            border-radius: 50px;
+            background: var(--bg-card);
+            cursor: pointer;
+            transition: all var(--transition);
+            border: 1px solid transparent;
+        }
+        .user-profile:hover { border-color: var(--border-color); background: var(--bg-hover); }
+        .user-profile .avatar {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .user-profile .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .user-profile .avatar i { color: #fff; font-size: 18px; }
+        .user-profile .name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+        .user-dropdown { position: relative; }
+        .dropdown-toggle {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px;
+            transition: var(--transition);
+        }
+        .dropdown-toggle:hover { color: var(--text-primary); }
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            min-width: 260px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 8px 0;
+            display: none;
+            z-index: 1000;
+        }
+        .dropdown-menu.show { display: block; animation: slideDown 0.2s ease; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .dropdown-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .dropdown-header .avatar {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .dropdown-header .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .dropdown-info .username { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+        .dropdown-info .userid { font-size: 12px; color: var(--text-muted); }
+        .dropdown-divider { height: 1px; background: var(--border-color); margin: 4px 0; }
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .dropdown-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .dropdown-item i { width: 20px; font-size: 15px; }
+        .dropdown-item.danger:hover { color: var(--accent-danger); }
+        .permission-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .permission-badge.owner { background: rgba(241, 196, 15, 0.15); color: #f1c40f; }
+
+        /* ========================================
+           PAGE CONTENT
+        ======================================== */
+        .page-content { flex: 1; padding: 28px; background: var(--bg-primary); }
+        .page { display: none; animation: fadeIn 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), #a29bfe);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .stat-card:hover::before { opacity: 1; }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 32px rgba(108, 92, 231, 0.1);
+        }
+        .stat-card .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        .stat-card .label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+        .stat-card .icon {
+            width: 44px; height: 44px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .stat-card .icon.purple { background: rgba(108, 92, 231, 0.15); color: var(--accent); }
+        .stat-card .icon.green { background: rgba(0, 184, 148, 0.15); color: var(--accent-success); }
+        .stat-card .icon.red { background: rgba(225, 112, 85, 0.15); color: var(--accent-danger); }
+        .stat-card .icon.yellow { background: rgba(253, 203, 110, 0.15); color: var(--accent-warning); }
+        .stat-card .icon.blue { background: rgba(116, 185, 255, 0.15); color: var(--accent-info); }
+        .stat-card .value { font-size: 28px; font-weight: 800; color: var(--text-primary); margin-top: 4px; }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            margin-bottom: 24px;
+            transition: all var(--transition);
+        }
+        .card:hover { border-color: rgba(108, 92, 231, 0.2); }
+        .card-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .card-header h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+        .card-header h3 i { color: var(--accent); }
+        .card-actions { display: flex; align-items: center; gap: 10px; }
+        .card-body { padding: 24px; }
+
+        /* Tables */
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        thead th {
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        tbody td {
+            padding: 12px 16px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+        tbody tr:hover { background: var(--bg-hover); }
+        tbody tr:last-child td { border-bottom: none; }
+        .table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            font-size: 13px;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(108, 92, 231, 0.3);
+        }
+        .btn-secondary {
+            background: var(--bg-input);
+            color: var(--text-secondary);
+        }
+        .btn-secondary:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-success { background: rgba(0, 184, 148, 0.15); color: var(--accent-success); }
+        .badge-danger { background: rgba(225, 112, 85, 0.15); color: var(--accent-danger); }
+        .badge-warning { background: rgba(253, 203, 110, 0.15); color: var(--accent-warning); }
+        .badge-info { background: rgba(116, 185, 255, 0.15); color: var(--accent-info); }
+        .badge-purple { background: rgba(108, 92, 231, 0.15); color: var(--accent); }
+
+        /* Loading */
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 20px;
+            color: var(--text-muted);
+            gap: 12px;
+            text-align: center;
+        }
+        .loading-state i { font-size: 36px; opacity: 0.4; }
+        .loading-state i.fa-spinner { animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Search */
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 0 14px;
+            transition: all var(--transition);
+        }
+        .search-box:focus-within { border-color: var(--accent); }
+        .search-box i { color: var(--text-muted); font-size: 14px; }
+        .search-box input {
+            background: none;
+            border: none;
+            padding: 9px 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            width: 180px;
+            font-family: var(--font);
+        }
+        .search-box input::placeholder { color: var(--text-muted); }
+
+        /* Commands */
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 10px;
+        }
+        .command-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition);
+        }
+        .command-item:hover { border-color: var(--accent); background: var(--bg-hover); }
+        .command-item .cmd {
+            font-family: monospace;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            background: rgba(108, 92, 231, 0.1);
+            padding: 2px 12px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+        .command-item .desc { font-size: 13px; color: var(--text-secondary); flex: 1; }
+
+        /* Settings */
+        .settings-group { display: flex; flex-direction: column; gap: 12px; }
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .setting-info { flex: 1; min-width: 0; }
+        .setting-label { display: block; font-size: 14px; font-weight: 500; color: var(--text-primary); }
+        .setting-desc { display: block; font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        .switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--border-color);
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+        .slider:before {
+            content: '';
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        .switch input:checked + .slider { background: var(--accent); }
+        .switch input:checked + .slider:before { transform: translateX(22px); }
+        .settings-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+
+        /* ========================================
+           RESPONSIVE
+        ======================================== */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.6);
+                z-index: 999;
+                backdrop-filter: blur(4px);
+            }
+            .sidebar-overlay.active { display: block; }
+            .main-content { margin-left: 0; }
+            .menu-toggle { display: block; }
+            .topbar { padding: 0 16px; height: 64px; flex-wrap: wrap; }
+            .topbar h1 { font-size: 18px; }
+            .page-content { padding: 16px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .stat-card { padding: 16px; }
+            .stat-card .value { font-size: 20px; }
+            .user-profile .name { display: none; }
+            .login-box { padding: 24px 16px; }
+            .commands-grid { grid-template-columns: 1fr; }
+            .setting-item { flex-direction: column; align-items: stretch; gap: 12px; }
+            .settings-actions { flex-direction: column; }
+            .card-header { flex-direction: column; align-items: stretch; gap: 12px; }
+            .card-actions { flex-wrap: wrap; }
+            .search-box input { width: 120px; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .stat-card { padding: 12px; }
+            .stat-card .value { font-size: 18px; }
+            .stat-card .icon { width: 32px; height: 32px; font-size: 14px; }
+        }
+    </style>
 </head>
 <body>
-    <!-- Login Overlay -->
-    <div class="login-overlay" id="loginOverlay">
-        <div class="login-container">
-            <div class="login-brand">
-                <div class="login-brand-icon">
-                    <i class="fas fa-crown"></i>
-                </div>
-                <h1>Vix Community</h1>
-                <p>Dashboard Management System</p>
-            </div>
-            <div class="login-box">
-                <div class="login-status" id="loginStatus">
-                    <i class="fas fa-shield-alt"></i>
-                    <p>Đăng nhập để tiếp tục</p>
-                </div>
-                <button class="discord-login-btn" id="discordLoginBtn">
-                    <i class="fab fa-discord"></i>
-                    Đăng nhập bằng Discord
-                </button>
-                <div class="login-footer">
-                    <span>Bảo mật bởi Discord OAuth2</span>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Unauthorized Overlay -->
-    <div class="unauthorized-overlay" id="unauthorizedOverlay" style="display:none;">
-        <div class="unauthorized-container">
-            <div class="unauthorized-icon">
-                <i class="fas fa-lock"></i>
+<!-- ============================================
+     SIDEBAR OVERLAY (Mobile)
+============================================ -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- ============================================
+     LOGIN OVERLAY
+============================================ -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-container">
+        <div class="login-brand">
+            <div class="login-brand-icon"><i class="fas fa-crown"></i></div>
+            <h1>Vix Community</h1>
+            <p>Dashboard Management System</p>
+        </div>
+        <div class="login-box">
+            <div class="login-status">
+                <i class="fas fa-shield-alt"></i>
+                <p>Đăng nhập để tiếp tục</p>
             </div>
-            <h2>Không có quyền truy cập</h2>
-            <p id="unauthorizedMessage">Bạn không có quyền quản lý server này.</p>
-            <button class="btn btn-secondary" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+            <button class="discord-login-btn" id="discordLoginBtn">
+                <i class="fab fa-discord"></i>
+                Đăng nhập bằng Discord
             </button>
+            <div class="login-footer">
+                <span><i class="fas fa-lock"></i> Bảo mật OAuth2</span>
+                <span><i class="fas fa-shield-alt"></i> Discord</span>
+            </div>
         </div>
     </div>
+</div>
 
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-brand">
-            <div class="brand-icon">
-                <i class="fas fa-crown"></i>
-            </div>
-            <span class="brand-text">Vix Community</span>
-        </div>
-        <nav class="sidebar-nav">
-            <a href="#" class="nav-item active" data-page="overview">
-                <i class="fas fa-th-large"></i>
-                <span>Tổng quan</span>
-            </a>
-            <a href="#" class="nav-item" data-page="server">
-                <i class="fas fa-server"></i>
-                <span>Máy chủ</span>
-            </a>
-            <a href="#" class="nav-item" data-page="users">
-                <i class="fas fa-users"></i>
-                <span>Người dùng</span>
-            </a>
-            <a href="#" class="nav-item" data-page="tickets">
-                <i class="fas fa-ticket-alt"></i>
-                <span>Ticket</span>
-            </a>
-            <a href="#" class="nav-item" data-page="orders">
-                <i class="fas fa-shopping-cart"></i>
-                <span>Đơn hàng</span>
-            </a>
-            <a href="#" class="nav-item" data-page="stock">
-                <i class="fas fa-boxes"></i>
-                <span>Kho hàng</span>
-            </a>
-            <a href="#" class="nav-item" data-page="economy">
-                <i class="fas fa-coins"></i>
-                <span>Kinh tế</span>
-            </a>
-            <a href="#" class="nav-item" data-page="moderation">
-                <i class="fas fa-gavel"></i>
-                <span>Kiểm duyệt</span>
-            </a>
-            <a href="#" class="nav-item" data-page="logs">
-                <i class="fas fa-history"></i>
-                <span>Nhật ký</span>
-            </a>
-            <a href="#" class="nav-item" data-page="commands">
-                <i class="fas fa-terminal"></i>
-                <span>Lệnh</span>
-            </a>
-            <a href="#" class="nav-item" data-page="settings">
-                <i class="fas fa-cog"></i>
-                <span>Cài đặt</span>
-            </a>
-            <a href="#" class="nav-item" data-page="bot-status">
-                <i class="fas fa-robot"></i>
-                <span>Trạng thái Bot</span>
-            </a>
-        </nav>
-        <div class="sidebar-footer">
-            <div class="status-dot online" id="botStatusDot"></div>
-            <span id="botStatusText">Bot Online</span>
-        </div>
-    </aside>
+<!-- ============================================
+     UNAUTHORIZED OVERLAY
+============================================ -->
+<div class="unauthorized-overlay" id="unauthorizedOverlay">
+    <div class="unauthorized-container">
+        <div class="unauthorized-icon"><i class="fas fa-lock"></i></div>
+        <h2>Không có quyền truy cập</h2>
+        <p id="unauthorizedMessage">Bạn không có quyền quản lý server này.</p>
+        <button class="btn btn-secondary" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+        </button>
+    </div>
+</div>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Topbar -->
-        <header class="topbar">
-            <div class="topbar-left">
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <h1 class="page-title" id="pageTitle">Tổng quan</h1>
-            </div>
-            <div class="topbar-right">
-                <button class="topbar-btn" id="refreshBtn" title="Làm mới">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
-                <button class="topbar-btn" id="themeToggle" title="Chuyển theme">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <div class="user-profile" id="userProfile" style="display:none;">
-                    <div class="avatar" id="userAvatar">
-                        <img src="" alt="" id="avatarImg" style="width:34px;height:34px;border-radius:50%;display:none;" />
-                        <i class="fas fa-user" id="avatarIcon"></i>
-                    </div>
-                    <span class="username" id="userDisplayName">Loading...</span>
-                    <div class="user-dropdown">
-                        <button class="dropdown-toggle" id="userDropdownToggle">
-                            <i class="fas fa-chevron-down"></i>
+<!-- ============================================
+     SIDEBAR
+============================================ -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <div class="icon"><i class="fas fa-crown"></i></div>
+        <span class="text">Vix Community</span>
+    </div>
+    <nav class="sidebar-nav">
+        <a class="active" data-page="overview"><i class="fas fa-th-large"></i> Tổng quan</a>
+        <a data-page="server"><i class="fas fa-server"></i> Máy chủ</a>
+        <a data-page="users"><i class="fas fa-users"></i> Người dùng</a>
+        <a data-page="tickets"><i class="fas fa-ticket-alt"></i> Ticket</a>
+        <a data-page="orders"><i class="fas fa-shopping-cart"></i> Đơn hàng</a>
+        <a data-page="stock"><i class="fas fa-boxes"></i> Kho hàng</a>
+        <a data-page="economy"><i class="fas fa-coins"></i> Kinh tế</a>
+        <a data-page="moderation"><i class="fas fa-gavel"></i> Kiểm duyệt</a>
+        <a data-page="logs"><i class="fas fa-history"></i> Nhật ký</a>
+        <a data-page="commands"><i class="fas fa-terminal"></i> Lệnh</a>
+        <a data-page="settings"><i class="fas fa-cog"></i> Cài đặt</a>
+        <a data-page="bot-status"><i class="fas fa-robot"></i> Trạng thái Bot</a>
+    </nav>
+    <div class="sidebar-footer">
+        <span class="status-dot online"></span>
+        <span>Bot Online</span>
+    </div>
+</aside>
+
+<!-- ============================================
+     MAIN CONTENT
+============================================ -->
+<main class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+            <h1 id="pageTitle">Tổng quan</h1>
+        </div>
+        <div class="topbar-right">
+            <button class="topbar-btn" id="themeToggle"><i class="fas fa-moon"></i></button>
+            <button class="topbar-btn" id="refreshBtn"><i class="fas fa-sync-alt"></i></button>
+            <div class="user-profile" id="userProfile" style="display:none;">
+                <div class="avatar" id="userAvatar">
+                    <img src="" alt="" id="avatarImg" style="display:none;" />
+                    <i class="fas fa-user" id="avatarIcon"></i>
+                </div>
+                <span class="name" id="userDisplayName">Loading...</span>
+                <div class="user-dropdown">
+                    <button class="dropdown-toggle" id="dropdownToggle"><i class="fas fa-chevron-down"></i></button>
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <div class="dropdown-header">
+                            <div class="avatar"><img src="" alt="" id="dropdownAvatar" /></div>
+                            <div class="dropdown-info">
+                                <div class="username" id="dropdownUsername">Username</div>
+                                <div class="userid" id="dropdownUserId">ID: 0</div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item" id="permissionDisplay">
+                            <i class="fas fa-shield-alt"></i>
+                            <span id="permissionText">Quyền: User</span>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item danger" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Đăng xuất</span>
                         </button>
-                        <div class="dropdown-menu" id="userDropdownMenu">
-                            <div class="dropdown-header" id="dropdownUserInfo">
-                                <div class="dropdown-avatar">
-                                    <img src="" alt="" id="dropdownAvatarImg" style="width:40px;height:40px;border-radius:50%;" />
-                                </div>
-                                <div class="dropdown-user-info">
-                                    <div class="dropdown-username" id="dropdownUsername">Username</div>
-                                    <div class="dropdown-userid" id="dropdownUserId">ID: 0</div>
-                                </div>
-                            </div>
-                            <div class="dropdown-divider"></div>
-                            <div class="dropdown-item permission-indicator" id="permissionIndicator">
-                                <i class="fas fa-shield-alt"></i>
-                                <span id="permissionText">Quyền: User</span>
-                            </div>
-                            <div class="dropdown-divider"></div>
-                            <button class="dropdown-item" onclick="logout()">
-                                <i class="fas fa-sign-out-alt"></i>
-                                <span>Đăng xuất</span>
-                            </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <section class="page-content" id="pageContent">
+
+        <!-- ========== OVERVIEW ========== -->
+        <div class="page active" id="page-overview">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="top"><span class="label">👥 Người dùng</span><div class="icon purple"><i class="fas fa-users"></i></div></div>
+                    <div class="value" id="statUsers">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="top"><span class="label">🎫 Ticket</span><div class="icon blue"><i class="fas fa-ticket-alt"></i></div></div>
+                    <div class="value" id="statTickets">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="top"><span class="label">💰 Tổng chi tiêu</span><div class="icon green"><i class="fas fa-coins"></i></div></div>
+                    <div class="value" id="statSpent">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="top"><span class="label">✅ Legit</span><div class="icon yellow"><i class="fas fa-check-circle"></i></div></div>
+                    <div class="value" id="statLegit">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="top"><span class="label">🚫 Blacklist</span><div class="icon red"><i class="fas fa-ban"></i></div></div>
+                    <div class="value" id="statBlacklist">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="top"><span class="label">🌐 Máy chủ</span><div class="icon purple"><i class="fas fa-server"></i></div></div>
+                    <div class="value" id="statGuilds">0</div>
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:24px;">
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-clock"></i> Hoạt động gần đây</h3></div>
+                    <div class="card-body" id="recentActivity"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-trophy"></i> Top chi tiêu</h3></div>
+                    <div class="card-body" id="topSpenders"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SERVER ========== -->
+        <div class="page" id="page-server">
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-server"></i> Thông tin máy chủ</h3></div>
+                <div class="card-body" id="serverInfo"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+            </div>
+        </div>
+
+        <!-- ========== USERS ========== -->
+        <div class="page" id="page-users">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-users"></i> Danh sách người dùng</h3>
+                    <div class="card-actions">
+                        <div class="search-box"><i class="fas fa-search"></i><input type="text" id="userSearch" placeholder="Tìm kiếm..." /></div>
+                        <button class="btn btn-primary" onclick="loadUsers()"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>#</th><th>Người dùng</th><th>Chi tiêu</th><th>Legit</th><th>Trạng thái</th></tr></thead>
+                            <tbody id="userTableBody"><tr><td colspan="5"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></td></tr></tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer"><span id="userCount">0 người dùng</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== TICKETS ========== -->
+        <div class="page" id="page-tickets">
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-ticket-alt"></i> Quản lý Ticket</h3></div>
+                <div class="card-body">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px;">
+                        <div style="background:var(--bg-input);padding:12px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Đang mở</div>
+                            <div style="font-size:24px;font-weight:700;color:var(--text-primary);" id="ticketOpen">0</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:12px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Đã đóng</div>
+                            <div style="font-size:24px;font-weight:700;color:var(--text-primary);" id="ticketClosed">0</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:12px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Tổng</div>
+                            <div style="font-size:24px;font-weight:700;color:var(--text-primary);" id="ticketTotal">0</div>
                         </div>
                     </div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>ID</th><th>Chủ sở hữu</th><th>Loại</th><th>Trạng thái</th><th>Ngày tạo</th></tr></thead>
+                            <tbody id="ticketTableBody"><tr><td colspan="5"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></td></tr></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </header>
+        </div>
 
-        <!-- Page Content -->
-        <section class="page-content" id="pageContent">
-            <!-- All pages remain the same -->
-            <!-- ... (keep all existing page content from previous version) ... -->
-        </section>
-    </main>
+        <!-- ========== ORDERS ========== -->
+        <div class="page" id="page-orders">
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-shopping-cart"></i> Đơn hàng Auto Buy</h3></div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Mã đơn</th><th>Người mua</th><th>Số lượng</th><th>Tổng tiền</th><th>Trạng thái</th></tr></thead>
+                            <tbody id="orderTableBody"><tr><td colspan="5"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
+        <!-- ========== STOCK ========== -->
+        <div class="page" id="page-stock">
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-boxes"></i> Quản lý kho hàng</h3></div>
+                <div class="card-body" id="stockGrid"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+            </div>
+        </div>
 
-    <script src="script.js"></script>
+        <!-- ========== ECONOMY ========== -->
+        <div class="page" id="page-economy">
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-coins"></i> Thống kê kinh tế</h3></div>
+                <div class="card-body" id="economyStats"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+            </div>
+        </div>
+
+        <!-- ========== MODERATION ========== -->
+        <div class="page" id="page-moderation">
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-gavel"></i> Kiểm duyệt</h3></div>
+                <div class="card-body" id="moderationStats"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+            </div>
+        </div>
+
+        <!-- ========== LOGS ========== -->
+        <div class="page" id="page-logs">
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-history"></i> Nhật ký hệ thống</h3></div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Thời gian</th><th>Hành động</th><th>Người dùng</th><th>Chi tiết</th></tr></thead>
+                            <tbody id="logTableBody"><tr><td colspan="4"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== COMMANDS ========== -->
+        <div class="page" id="page-commands">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-terminal"></i> Danh sách lệnh</h3>
+                    <div class="card-actions">
+                        <div class="search-box"><i class="fas fa-search"></i><input type="text" id="commandSearch" placeholder="Tìm lệnh..." /></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="commands-grid" id="commandsGrid"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SETTINGS ========== -->
+        <div class="page" id="page-settings">
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-cog"></i> Cài đặt hệ thống</h3></div>
+                <div class="card-body">
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info"><span class="setting-label">🔧 Chế độ bảo trì</span><span class="setting-desc">Bật/tắt chế độ bảo trì hệ thống</span></div>
+                            <label class="switch"><input type="checkbox" id="maintenanceToggle" /><span class="slider"></span></label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info"><span class="setting-label">🔒 Lockdown</span><span class="setting-desc">Khóa toàn bộ hệ thống</span></div>
+                            <label class="switch"><input type="checkbox" id="lockdownToggle" /><span class="slider"></span></label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info"><span class="setting-label">🤖 Auto Mod</span><span class="setting-desc">Bật/tắt hệ thống tự động kiểm duyệt</span></div>
+                            <label class="switch"><input type="checkbox" id="automodToggle" /><span class="slider"></span></label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info"><span class="setting-label">🖼️ Image Blacklist</span><span class="setting-desc">Bật/tắt chặn ảnh bị cấm</span></div>
+                            <label class="switch"><input type="checkbox" id="imageBlockToggle" /><span class="slider"></span></label>
+                        </div>
+                    </div>
+                    <div class="settings-actions">
+                        <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Lưu</button>
+                        <button class="btn btn-secondary" onclick="resetSettings()"><i class="fas fa-undo"></i> Đặt lại</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== BOT STATUS ========== -->
+        <div class="page" id="page-bot-status">
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-robot"></i> Trạng thái Bot</h3></div>
+                <div class="card-body" id="botStatusContent"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+            </div>
+        </div>
+
+    </section>
+</main>
+
+<!-- ============================================
+     TOAST CONTAINER
+============================================ -->
+<div id="toastContainer" style="position:fixed;bottom:24px;right:24px;z-index:99999;display:flex;flex-direction:column;gap:10px;max-width:400px;width:100%;"></div>
+
+<script>
+// ============================================
+// CONFIGURATION - THAY ĐỔI TẠI ĐÂY
+// ============================================
+const CONFIG = {
+    // 🔥 QUAN TRỌNG: Thay CLIENT_ID bằng Client ID của bạn 🔥
+    DISCORD_CLIENT_ID: 'YOUR_CLIENT_ID_HERE',
+    // 🔥 QUAN TRỌNG: Thay bằng URL GitHub Pages của bạn 🔥
+    REDIRECT_URI: 'https://khanhne1121.github.io/Vix-Dashboard/',
+    // Guild ID để kiểm tra quyền
+    GUILD_ID: '1520984545699299428'
+};
+
+// ============================================
+// MOCK DATA
+// ============================================
+const MOCK = {
+    stats: {
+        totalUsers: 1254,
+        totalTickets: 342,
+        totalSpent: '28.5M',
+        totalLegit: 847,
+        totalBlacklist: 23,
+        totalGuilds: 5
+    },
+    users: [
+        { username: 'kian_nguyen', spent: '12.5M', legit: 156 },
+        { username: 'quang_nguyen', spent: '8.2M', legit: 89 },
+        { username: 'thuy_linh', spent: '5.1M', legit: 45 },
+        { username: 'hoang_tuan', spent: '3.8M', legit: 32 },
+        { username: 'mai_anh', spent: '2.4M', legit: 28 },
+        { username: 'duc_minh', spent: '1.9M', legit: 15 },
+        { username: 'phuong_nam', spent: '1.2M', legit: 10 },
+        { username: 'bao_chau', spent: '850K', legit: 8 },
+        { username: 'minh_quan', spent: '620K', legit: 5 },
+        { username: 'ngoc_tram', spent: '410K', legit: 3 }
+    ],
+    tickets: [
+        { id: 'TICKET-0001', owner: 'kian_nguyen', type: 'Giao dịch', status: 'OPEN', created: '2024-01-15' },
+        { id: 'TICKET-0002', owner: 'quang_nguyen', type: 'Hỗ trợ', status: 'CLAIMED', created: '2024-01-15' },
+        { id: 'TICKET-0003', owner: 'thuy_linh', type: 'Báo cáo', status: 'CLOSED', created: '2024-01-14' }
+    ],
+    orders: [
+        { id: 'AB123456', user: 'kian_nguyen', amount: '1.5M', total: '750K', status: 'PENDING' },
+        { id: 'AB123457', user: 'quang_nguyen', amount: '2M', total: '1M', status: 'COMPLETED' }
+    ],
+    stock: [
+        { name: 'Mon Game', amount: '12.5M', price: '500 VNĐ/1m' },
+        { name: 'Voucher', amount: '250', price: '10K VNĐ' }
+    ],
+    logs: [
+        { time: '2024-01-15 14:35', action: 'TICKET_CREATE', user: 'kian_nguyen', details: 'Tạo ticket mới' },
+        { time: '2024-01-15 14:20', action: 'USER_BAN', user: 'admin', details: 'Ban user spammer' }
+    ],
+    commands: [
+        { cmd: '/setup_ticket', desc: 'Tạo panel ticket' },
+        { cmd: '/ticket', desc: 'Tạo ticket nhanh' },
+        { cmd: '/lockticket', desc: 'Khóa ticket' },
+        { cmd: '/bxh_chitieu', desc: 'BXH chi tiêu' },
+        { cmd: '/checklegit', desc: 'Tổng legit' },
+        { cmd: '/setup_autobuy', desc: 'Tạo panel auto buy' },
+        { cmd: '/addstock', desc: 'Thêm stock' },
+        { cmd: '/automod', desc: 'Cấu hình AutoMod' },
+        { cmd: '/shop', desc: 'Cửa hàng' },
+        { cmd: '/level', desc: 'Hệ thống cấp độ' },
+        { cmd: '/my', desc: 'Thông tin tài khoản' },
+        { cmd: '/help', desc: 'Trợ giúp' },
+        { cmd: '/owner cash', desc: 'Quản lý cash' },
+        { cmd: '/owner maintenance', desc: 'Bảo trì' }
+    ],
+    botStatus: {
+        status: 'online',
+        uptime: '12h 34m',
+        ping: '42ms',
+        guilds: 5,
+        users: 1254,
+        memory: '156 MB'
+    }
+};
+
+// ============================================
+// STATE
+// ============================================
+let state = {
+    currentPage: 'overview',
+    isAuthenticated: false,
+    user: null,
+    accessToken: null,
+    permission: { role: 'USER', hasAccess: true }
+};
+
+// ============================================
+// DOM REFS
+// ============================================
+const $ = (id) => document.getElementById(id);
+
+// ============================================
+// TOAST SYSTEM
+// ============================================
+function showToast(message, type = 'info', title = '') {
+    const container = $('toastContainer');
+    const toast = document.createElement('div');
+    const colors = { success: '#00b894', error: '#e17055', warning: '#fdcb6e', info: '#6c5ce7' };
+    toast.style.cssText = `
+        background: #1a1a2e; border: 1px solid #2a2a40; border-radius: 10px;
+        padding: 14px 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        display: flex; align-items: center; gap: 12px;
+        animation: slideUp 0.3s ease; border-left: 4px solid ${colors[type] || '#6c5ce7'};
+    `;
+    toast.innerHTML = `
+        <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'}" 
+           style="color:${colors[type] || '#6c5ce7'};font-size:20px;"></i>
+        <div style="flex:1;font-size:14px;color:#a0a0b8;">${title ? `<strong style="color:#fff;">${title}</strong> ` : ''}${message}</div>
+        <button onclick="this.parentElement.remove()" style="background:none;border:none;color:#6a6a82;cursor:pointer;font-size:16px;">✕</button>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 5000);
+}
+
+// ============================================
+// DISCORD OAUTH2 - IMPLICIT FLOW
+// ============================================
+function loginWithDiscord() {
+    const clientId = CONFIG.DISCORD_CLIENT_ID;
+    const redirectUri = encodeURIComponent(CONFIG.REDIRECT_URI);
+    const scope = 'identify guilds';
+    const responseType = 'token';
+    
+    const url = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}`;
+    
+    window.location.href = url;
+}
+
+function handleOAuthCallback() {
+    // Lấy access_token từ URL hash
+    const hash = window.location.hash;
+    if (hash && hash.includes('access_token=')) {
+        const params = new URLSearchParams(hash.slice(1));
+        const accessToken = params.get('access_token');
+        
+        if (accessToken) {
+            state.accessToken = accessToken;
+            // Xóa hash khỏi URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+            // Fetch user info
+            fetchUserInfo(accessToken);
+        }
+    }
+}
+
+async function fetchUserInfo(accessToken) {
+    try {
+        // Get user info
+        const userRes = await fetch('https://discord.com/api/users/@me', {
+            headers: { 'Authorization': `Bearer ${accessToken}` }
+        });
+        if (!userRes.ok) throw new Error('Failed to fetch user');
+        const user = await userRes.json();
+
+        // Get user guilds
+        const guildRes = await fetch('https://discord.com/api/users/@me/guilds', {
+            headers: { 'Authorization': `Bearer ${accessToken}` }
+        });
+        const guilds = await guildRes.json();
+
+        // Check permission
+        const guild = guilds.find(g => g.id === CONFIG.GUILD_ID);
+        let permission = { role: 'USER', hasAccess: false };
+        
+        if (guild) {
+            // Check if user is owner of the guild
+            if (guild.owner) {
+                permission = { role: 'OWNER', hasAccess: true };
+            } else {
+                // Check permissions
+                const perms = guild.permissions || 0;
+                const ADMIN_PERMISSION = 0x8;
+                if (perms & ADMIN_PERMISSION) {
+                    permission = { role: 'ADMIN', hasAccess: true };
+                } else {
+                    permission = { role: 'USER', hasAccess: true };
+                }
+            }
+        }
+
+        state.isAuthenticated = true;
+        state.user = user;
+        state.permission = permission;
+
+        showDashboard();
+        showToast(`Chào mừng ${user.username}!`, 'success');
+
+    } catch (error) {
+        showToast('Lỗi đăng nhập: ' + error.message, 'error');
+        showLogin();
+    }
+}
+
+// ============================================
+// AUTHENTICATION UI
+// ============================================
+function showLogin() {
+    $('loginOverlay').classList.remove('hidden');
+    $('unauthorizedOverlay').classList.remove('show');
+    $('userProfile').style.display = 'none';
+}
+
+function showDashboard() {
+    $('loginOverlay').classList.add('hidden');
+    $('unauthorizedOverlay').classList.remove('show');
+    $('userProfile').style.display = 'flex';
+
+    if (state.user) {
+        const name = state.user.username || 'User';
+        $('userDisplayName').textContent = name;
+        $('dropdownUsername').textContent = name;
+        $('dropdownUserId').textContent = `ID: ${state.user.id}`;
+
+        if (state.user.avatar) {
+            const url = `https://cdn.discordapp.com/avatars/${state.user.id}/${state.user.avatar}.png?size=64`;
+            $('avatarImg').src = url;
+            $('avatarImg').style.display = 'block';
+            $('avatarIcon').style.display = 'none';
+            $('dropdownAvatar').src = url;
+        } else {
+            $('avatarImg').style.display = 'none';
+            $('avatarIcon').style.display = 'block';
+        }
+    }
+
+    // Permission
+    const roleMap = {
+        'OWNER': { icon: 'fa-crown', color: '#f1c40f', label: 'Owner' },
+        'ADMIN': { icon: 'fa-shield-alt', color: '#e17055', label: 'Admin' },
+        'STAFF': { icon: 'fa-user-tie', color: '#74b9ff', label: 'Staff' },
+        'USER': { icon: 'fa-user', color: '#6c5ce7', label: 'User' }
+    };
+    const role = roleMap[state.permission?.role] || roleMap.USER;
+    $('permissionText').innerHTML = `<i class="fas ${role.icon}" style="color:${role.color};"></i> Quyền: ${role.label}`;
+
+    loadPageData(state.currentPage);
+}
+
+function showUnauthorized(message) {
+    $('loginOverlay').classList.add('hidden');
+    $('unauthorizedOverlay').classList.add('show');
+    $('unauthorizedMessage').textContent = message || 'Bạn không có quyền truy cập.';
+    $('userProfile').style.display = 'none';
+}
+
+function logout() {
+    state.isAuthenticated = false;
+    state.user = null;
+    state.accessToken = null;
+    showLogin();
+    showToast('Đã đăng xuất!', 'success');
+}
+
+// ============================================
+// NAVIGATION
+// ============================================
+function navigateTo(page) {
+    if (!state.isAuthenticated) return;
+    state.currentPage = page;
+
+    document.querySelectorAll('.sidebar-nav a').forEach(el => {
+        el.classList.toggle('active', el.dataset.page === page);
+    });
+
+    document.querySelectorAll('.page').forEach(el => {
+        el.classList.toggle('active', el.id === `page-${page}`);
+    });
+
+    const titles = {
+        overview: 'Tổng quan', server: 'Máy chủ', users: 'Người dùng',
+        tickets: 'Ticket', orders: 'Đơn hàng', stock: 'Kho hàng',
+        economy: 'Kinh tế', moderation: 'Kiểm duyệt', logs: 'Nhật ký',
+        commands: 'Lệnh', settings: 'Cài đặt', 'bot-status': 'Trạng thái Bot'
+    };
+    $('pageTitle').textContent = titles[page] || 'Dashboard';
+    closeSidebar();
+    loadPageData(page);
+}
+
+function openSidebar() {
+    $('sidebar').classList.add('open');
+    $('sidebarOverlay').classList.add('active');
+}
+function closeSidebar() {
+    $('sidebar').classList.remove('open');
+    $('sidebarOverlay').classList.remove('active');
+}
+
+// ============================================
+// LOAD DATA
+// ============================================
+async function loadPageData(page) {
+    try {
+        switch(page) {
+            case 'overview': loadOverview(); break;
+            case 'server': loadServer(); break;
+            case 'users': loadUsers(); break;
+            case 'tickets': loadTickets(); break;
+            case 'orders': loadOrders(); break;
+            case 'stock': loadStock(); break;
+            case 'economy': loadEconomy(); break;
+            case 'moderation': loadModeration(); break;
+            case 'logs': loadLogs(); break;
+            case 'commands': loadCommands(); break;
+            case 'settings': loadSettings(); break;
+            case 'bot-status': loadBotStatus(); break;
+        }
+    } catch(e) {
+        showToast('Lỗi tải dữ liệu: ' + e.message, 'error');
+    }
+}
+
+// ============================================
+// LOAD FUNCTIONS
+// ============================================
+function loadOverview() {
+    const stats = MOCK.stats;
+    $('statUsers').textContent = stats.totalUsers;
+    $('statTickets').textContent = stats.totalTickets;
+    $('statSpent').textContent = stats.totalSpent;
+    $('statLegit').textContent = stats.totalLegit;
+    $('statBlacklist').textContent = stats.totalBlacklist;
+    $('statGuilds').textContent = stats.totalGuilds;
+
+    const recent = $('recentActivity');
+    if (MOCK.logs.length) {
+        recent.innerHTML = MOCK.logs.slice(0,5).map(l => `
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-color);">
+                <span style="color:var(--text-secondary);font-size:13px;">${l.action}</span>
+                <span style="color:var(--text-muted);font-size:12px;">${l.user} • ${l.time}</span>
+            </div>
+        `).join('');
+    } else {
+        recent.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-inbox"></i><p>Chưa có hoạt động</p></div>`;
+    }
+
+    const spenders = $('topSpenders');
+    if (MOCK.users.length) {
+        spenders.innerHTML = MOCK.users.slice(0,5).map((u,i) => `
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-color);">
+                <span style="color:var(--text-secondary);font-size:13px;">${i+1}. ${u.username}</span>
+                <span style="color:var(--accent);font-weight:600;">${u.spent}</span>
+            </div>
+        `).join('');
+    } else {
+        spenders.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-inbox"></i><p>Chưa có dữ liệu</p></div>`;
+    }
+}
+
+function loadServer() {
+    $('serverInfo').innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;">
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">Tên máy chủ</div>
+                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">Vix Community</div>
+            </div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">ID</div>
+                <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-top:4px;font-family:monospace;">${CONFIG.GUILD_ID}</div>
+            </div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">Thành viên</div>
+                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">${MOCK.stats.totalUsers}</div>
+            </div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">Ngày tạo</div>
+                <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-top:4px;">15/01/2024</div>
+            </div>
+        </div>
+    `;
+}
+
+function loadUsers() {
+    const tbody = $('userTableBody');
+    if (MOCK.users.length) {
+        tbody.innerHTML = MOCK.users.map((u,i) => `
+            <tr>
+                <td>${i+1}</td>
+                <td><strong style="color:var(--text-primary);">${u.username}</strong></td>
+                <td>${u.spent}</td>
+                <td>${u.legit}</td>
+                <td><span class="badge badge-success">Hoạt động</span></td>
+            </tr>
+        `).join('');
+        $('userCount').textContent = `${MOCK.users.length} người dùng`;
+    } else {
+        tbody.innerHTML = `<tr><td colspan="5"><div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-users"></i><p>Không có dữ liệu</p></div></td></tr>`;
+    }
+}
+
+function loadTickets() {
+    const tickets = MOCK.tickets;
+    $('ticketOpen').textContent = tickets.filter(t => t.status !== 'CLOSED').length;
+    $('ticketClosed').textContent = tickets.filter(t => t.status === 'CLOSED').length;
+    $('ticketTotal').textContent = tickets.length;
+
+    const tbody = $('ticketTableBody');
+    if (tickets.length) {
+        const statusMap = { 'OPEN': 'badge-success', 'CLAIMED': 'badge-info', 'CLOSED': 'badge-danger' };
+        tbody.innerHTML = tickets.map(t => `
+            <tr>
+                <td><strong style="color:var(--text-primary);font-family:monospace;">${t.id}</strong></td>
+                <td>${t.owner}</td>
+                <td>${t.type}</td>
+                <td><span class="badge ${statusMap[t.status] || 'badge-secondary'}">${t.status}</span></td>
+                <td>${t.created}</td>
+            </tr>
+        `).join('');
+    } else {
+        tbody.innerHTML = `<tr><td colspan="5"><div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-ticket-alt"></i><p>Chưa có ticket</p></div></td></tr>`;
+    }
+}
+
+function loadOrders() {
+    const tbody = $('orderTableBody');
+    if (MOCK.orders.length) {
+        const statusMap = { 'PENDING': 'badge-warning', 'COMPLETED': 'badge-success' };
+        tbody.innerHTML = MOCK.orders.map(o => `
+            <tr>
+                <td><strong style="color:var(--text-primary);font-family:monospace;">${o.id}</strong></td>
+                <td>${o.user}</td>
+                <td>${o.amount}</td>
+                <td>${o.total}</td>
+                <td><span class="badge ${statusMap[o.status] || 'badge-secondary'}">${o.status}</span></td>
+            </tr>
+        `).join('');
+    } else {
+        tbody.innerHTML = `<tr><td colspan="5"><div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-shopping-cart"></i><p>Chưa có đơn hàng</p></div></td></tr>`;
+    }
+}
+
+function loadStock() {
+    const grid = $('stockGrid');
+    if (MOCK.stock.length) {
+        grid.innerHTML = MOCK.stock.map(item => `
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;border:1px solid var(--border-color);">
+                <div style="color:var(--text-secondary);font-size:14px;">${item.name}</div>
+                <div style="font-size:28px;font-weight:700;color:var(--text-primary);margin:4px 0;">${item.amount}</div>
+                <div style="color:var(--text-muted);font-size:13px;">${item.price}</div>
+            </div>
+        `).join('');
+    } else {
+        grid.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-boxes"></i><p>Kho hàng trống</p></div>`;
+    }
+}
+
+function loadEconomy() {
+    $('economyStats').innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;">
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">Tổng chi tiêu</div>
+                <div style="font-size:24px;font-weight:700;color:var(--text-primary);margin-top:4px;">${MOCK.stats.totalSpent}</div>
+            </div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">Giao dịch</div>
+                <div style="font-size:24px;font-weight:700;color:var(--text-primary);margin-top:4px;">1,247</div>
+            </div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">Top chi tiêu</div>
+                <div style="font-size:18px;font-weight:600;color:var(--text-primary);margin-top:4px;">kian_nguyen</div>
+            </div>
+        </div>
+    `;
+}
+
+function loadModeration() {
+    $('moderationStats').innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;">
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);">⚠️ Cảnh báo</div>
+                <div style="font-size:28px;font-weight:700;color:var(--accent-warning);">89</div>
+            </div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);">🔨 Ban</div>
+                <div style="font-size:28px;font-weight:700;color:var(--accent-danger);">12</div>
+            </div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);">👢 Kick</div>
+                <div style="font-size:28px;font-weight:700;color:var(--accent-danger);">34</div>
+            </div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);">🔇 Mute</div>
+                <div style="font-size:28px;font-weight:700;color:var(--accent-warning);">56</div>
+            </div>
+        </div>
+    `;
+}
+
+function loadLogs() {
+    const tbody = $('logTableBody');
+    if (MOCK.logs.length) {
+        tbody.innerHTML = MOCK.logs.map(l => `
+            <tr>
+                <td style="font-size:12px;color:var(--text-muted);">${l.time}</td>
+                <td><span class="badge badge-purple">${l.action}</span></td>
+                <td>${l.user}</td>
+                <td style="color:var(--text-secondary);">${l.details}</td>
+            </tr>
+        `).join('');
+    } else {
+        tbody.innerHTML = `<tr><td colspan="4"><div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-history"></i><p>Chưa có nhật ký</p></div></td></tr>`;
+    }
+}
+
+function loadCommands() {
+    const grid = $('commandsGrid');
+    const search = $('commandSearch').value.toLowerCase();
+    const filtered = MOCK.commands.filter(c => 
+        c.cmd.toLowerCase().includes(search) || c.desc.toLowerCase().includes(search)
+    );
+    if (filtered.length) {
+        grid.innerHTML = filtered.map(c => `
+            <div class="command-item">
+                <span class="cmd">${c.cmd}</span>
+                <span class="desc">${c.desc}</span>
+            </div>
+        `).join('');
+    } else {
+        grid.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-terminal"></i><p>Không tìm thấy lệnh</p></div>`;
+    }
+}
+
+function loadSettings() {
+    $('maintenanceToggle').checked = localStorage.getItem('maintenance') === 'true';
+    $('lockdownToggle').checked = localStorage.getItem('lockdown') === 'true';
+    $('automodToggle').checked = localStorage.getItem('automod') === 'true';
+    $('imageBlockToggle').checked = localStorage.getItem('imageBlock') === 'true';
+}
+
+function saveSettings() {
+    localStorage.setItem('maintenance', $('maintenanceToggle').checked);
+    localStorage.setItem('lockdown', $('lockdownToggle').checked);
+    localStorage.setItem('automod', $('automodToggle').checked);
+    localStorage.setItem('imageBlock', $('imageBlockToggle').checked);
+    showToast('Đã lưu cài đặt!', 'success');
+}
+
+function resetSettings() {
+    $('maintenanceToggle').checked = false;
+    $('lockdownToggle').checked = false;
+    $('automodToggle').checked = false;
+    $('imageBlockToggle').checked = false;
+    ['maintenance', 'lockdown', 'automod', 'imageBlock'].forEach(k => localStorage.removeItem(k));
+    showToast('Đã đặt lại cài đặt!', 'info');
+}
+
+function loadBotStatus() {
+    const status = MOCK.botStatus;
+    $('botStatusContent').innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;">
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);">Trạng thái</div>
+                <div style="font-size:20px;font-weight:700;color:var(--accent-success);margin-top:4px;">🟢 Online</div>
+            </div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);">Uptime</div>
+                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">${status.uptime}</div>
+            </div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);">Ping</div>
+                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">${status.ping}</div>
+            </div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);">Máy chủ</div>
+                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">${status.guilds}</div>
+            </div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);">Người dùng</div>
+                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">${status.users}</div>
+            </div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-size:12px;color:var(--text-muted);">Bộ nhớ</div>
+                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">${status.memory}</div>
+            </div>
+        </div>
+    `;
+}
+
+// ============================================
+// EVENT LISTENERS
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    // Navigation
+    document.querySelectorAll('.sidebar-nav a').forEach(el => {
+        el.addEventListener('click', () => navigateTo(el.dataset.page));
+    });
+
+    // Menu toggle
+    $('menuToggle').addEventListener('click', openSidebar);
+    $('sidebarOverlay').addEventListener('click', closeSidebar);
+
+    // Dropdown
+    $('dropdownToggle').addEventListener('click', (e) => {
+        e.stopPropagation();
+        $('dropdownMenu').classList.toggle('show');
+    });
+    document.addEventListener('click', () => $('dropdownMenu').classList.remove('show'));
+
+    // Refresh
+    $('refreshBtn').addEventListener('click', () => {
+        showToast('Đang làm mới...', 'info');
+        loadPageData(state.currentPage);
+    });
+
+    // Theme toggle
+    let dark = true;
+    $('themeToggle').addEventListener('click', () => {
+        dark = !dark;
+        const root = document.documentElement;
+        if (dark) {
+            root.style.setProperty('--bg-primary', '#0a0a0f');
+            root.style.setProperty('--bg-secondary', '#12121a');
+            root.style.setProperty('--bg-card', '#1a1a2e');
+            root.style.setProperty('--text-primary', '#f0f0f5');
+            root.style.setProperty('--text-secondary', '#a0a0b8');
+            $('themeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+        } else {
+            root.style.setProperty('--bg-primary', '#f0f0f5');
+            root.style.setProperty('--bg-secondary', '#ffffff');
+            root.style.setProperty('--bg-card', '#ffffff');
+            root.style.setProperty('--text-primary', '#1a1a2e');
+            root.style.setProperty('--text-secondary', '#4a4a6a');
+            $('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+        }
+    });
+
+    // Discord Login
+    $('discordLoginBtn').addEventListener('click', loginWithDiscord);
+
+    // Command search
+    $('commandSearch').addEventListener('input', loadCommands);
+
+    // User search
+    $('userSearch').addEventListener('input', loadUsers);
+
+    // Handle OAuth callback
+    handleOAuthCallback();
+
+    // Check if already authenticated via token in session
+    if (!state.isAuthenticated) {
+        showLogin();
+    }
+
+    console.log('✅ Vix Community Dashboard loaded!');
+    console.log(`📊 Client ID: ${CONFIG.DISCORD_CLIENT_ID}`);
+    console.log(`🔗 Redirect URI: ${CONFIG.REDIRECT_URI}`);
+});
+</script>
+
 </body>
 </html>
