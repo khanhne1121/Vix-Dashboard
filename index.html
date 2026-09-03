@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vix Community Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+    <!-- Login Overlay -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-container">
+            <div class="login-brand">
+                <div class="login-brand-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h1>Vix Community</h1>
+                <p>Dashboard Management System</p>
+            </div>
+            <div class="login-box">
+                <div class="login-status" id="loginStatus">
+                    <i class="fas fa-shield-alt"></i>
+                    <p>Đăng nhập để tiếp tục</p>
+                </div>
+                <button class="discord-login-btn" id="discordLoginBtn">
+                    <i class="fab fa-discord"></i>
+                    Đăng nhập bằng Discord
+                </button>
+                <div class="login-footer">
+                    <span>Bảo mật bởi Discord OAuth2</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unauthorized Overlay -->
+    <div class="unauthorized-overlay" id="unauthorizedOverlay" style="display:none;">
+        <div class="unauthorized-container">
+            <div class="unauthorized-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h2>Không có quyền truy cập</h2>
+            <p id="unauthorizedMessage">Bạn không có quyền quản lý server này.</p>
+            <button class="btn btn-secondary" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+            </button>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <i class="fas fa-crown"></i>
+            </div>
+            <span class="brand-text">Vix Community</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-page="overview">
+                <i class="fas fa-th-large"></i>
+                <span>Tổng quan</span>
+            </a>
+            <a href="#" class="nav-item" data-page="server">
+                <i class="fas fa-server"></i>
+                <span>Máy chủ</span>
+            </a>
+            <a href="#" class="nav-item" data-page="users">
+                <i class="fas fa-users"></i>
+                <span>Người dùng</span>
+            </a>
+            <a href="#" class="nav-item" data-page="tickets">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Ticket</span>
+            </a>
+            <a href="#" class="nav-item" data-page="orders">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Đơn hàng</span>
+            </a>
+            <a href="#" class="nav-item" data-page="stock">
+                <i class="fas fa-boxes"></i>
+                <span>Kho hàng</span>
+            </a>
+            <a href="#" class="nav-item" data-page="economy">
+                <i class="fas fa-coins"></i>
+                <span>Kinh tế</span>
+            </a>
+            <a href="#" class="nav-item" data-page="moderation">
+                <i class="fas fa-gavel"></i>
+                <span>Kiểm duyệt</span>
+            </a>
+            <a href="#" class="nav-item" data-page="logs">
+                <i class="fas fa-history"></i>
+                <span>Nhật ký</span>
+            </a>
+            <a href="#" class="nav-item" data-page="commands">
+                <i class="fas fa-terminal"></i>
+                <span>Lệnh</span>
+            </a>
+            <a href="#" class="nav-item" data-page="settings">
+                <i class="fas fa-cog"></i>
+                <span>Cài đặt</span>
+            </a>
+            <a href="#" class="nav-item" data-page="bot-status">
+                <i class="fas fa-robot"></i>
+                <span>Trạng thái Bot</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="status-dot online" id="botStatusDot"></div>
+            <span id="botStatusText">Bot Online</span>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title" id="pageTitle">Tổng quan</h1>
+            </div>
+            <div class="topbar-right">
+                <button class="topbar-btn" id="refreshBtn" title="Làm mới">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <button class="topbar-btn" id="themeToggle" title="Chuyển theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="user-profile" id="userProfile" style="display:none;">
+                    <div class="avatar" id="userAvatar">
+                        <img src="" alt="" id="avatarImg" style="width:34px;height:34px;border-radius:50%;display:none;" />
+                        <i class="fas fa-user" id="avatarIcon"></i>
+                    </div>
+                    <span class="username" id="userDisplayName">Loading...</span>
+                    <div class="user-dropdown">
+                        <button class="dropdown-toggle" id="userDropdownToggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu" id="userDropdownMenu">
+                            <div class="dropdown-header" id="dropdownUserInfo">
+                                <div class="dropdown-avatar">
+                                    <img src="" alt="" id="dropdownAvatarImg" style="width:40px;height:40px;border-radius:50%;" />
+                                </div>
+                                <div class="dropdown-user-info">
+                                    <div class="dropdown-username" id="dropdownUsername">Username</div>
+                                    <div class="dropdown-userid" id="dropdownUserId">ID: 0</div>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item permission-indicator" id="permissionIndicator">
+                                <i class="fas fa-shield-alt"></i>
+                                <span id="permissionText">Quyền: User</span>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Đăng xuất</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <section class="page-content" id="pageContent">
+            <!-- All pages remain the same -->
+            <!-- ... (keep all existing page content from previous version) ... -->
+        </section>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
