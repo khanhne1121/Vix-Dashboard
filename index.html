@@ -9,9 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
-        /* ========================================
-           RESET & VARIABLES
-        ======================================== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --bg-primary: #0a0a0f;
@@ -44,14 +41,12 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-secondary); }
         ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
         /* ========================================
-           LOGIN OVERLAY
+           LOGIN
         ======================================== */
         .login-overlay {
             position: fixed;
@@ -138,7 +133,6 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 28px rgba(88, 101, 242, 0.4);
         }
-        .discord-login-btn:active { transform: translateY(0); }
         .discord-login-btn i { font-size: 28px; }
         .login-footer {
             margin-top: 20px;
@@ -147,50 +141,6 @@
             display: flex;
             justify-content: center;
             gap: 16px;
-        }
-
-        /* ========================================
-           UNAUTHORIZED OVERLAY
-        ======================================== */
-        .unauthorized-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: var(--bg-primary);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 99998;
-            padding: 20px;
-        }
-        .unauthorized-overlay.show { display: flex; }
-        .unauthorized-container {
-            max-width: 420px;
-            width: 100%;
-            text-align: center;
-            animation: fadeUp 0.5s ease;
-        }
-        .unauthorized-icon {
-            width: 88px; height: 88px;
-            background: rgba(225, 112, 85, 0.15);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            color: var(--accent-danger);
-            margin: 0 auto 16px;
-            border: 2px solid rgba(225, 112, 85, 0.2);
-        }
-        .unauthorized-container h2 {
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-        .unauthorized-container p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            margin-bottom: 24px;
         }
 
         /* ========================================
@@ -278,13 +228,10 @@
             animation: pulse 2s infinite;
         }
         .status-dot.online { background: var(--accent-success); }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
 
         /* ========================================
-           MAIN CONTENT
+           MAIN
         ======================================== */
         .main-content { margin-left: var(--sidebar-width); min-height: 100vh; display: flex; flex-direction: column; }
 
@@ -431,16 +378,6 @@
         .dropdown-item:hover { background: var(--bg-hover); color: var(--text-primary); }
         .dropdown-item i { width: 20px; font-size: 15px; }
         .dropdown-item.danger:hover { color: var(--accent-danger); }
-        .permission-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .permission-badge.owner { background: rgba(241, 196, 15, 0.15); color: #f1c40f; }
 
         /* ========================================
            PAGE CONTENT
@@ -527,7 +464,6 @@
         }
         .card-header h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
         .card-header h3 i { color: var(--accent); }
-        .card-actions { display: flex; align-items: center; gap: 10px; }
         .card-body { padding: 24px; }
 
         /* Tables */
@@ -549,46 +485,6 @@
             border-bottom: 1px solid var(--border-color);
         }
         tbody tr:hover { background: var(--bg-hover); }
-        tbody tr:last-child td { border-bottom: none; }
-        .table-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 16px;
-            font-size: 13px;
-            color: var(--text-muted);
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 18px;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            font-weight: 600;
-            font-family: var(--font);
-            cursor: pointer;
-            transition: all var(--transition);
-        }
-        .btn-primary {
-            background: var(--accent);
-            color: #fff;
-        }
-        .btn-primary:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(108, 92, 231, 0.3);
-        }
-        .btn-secondary {
-            background: var(--bg-input);
-            color: var(--text-secondary);
-        }
-        .btn-secondary:hover { background: var(--bg-hover); color: var(--text-primary); }
 
         /* Badges */
         .badge {
@@ -620,58 +516,58 @@
         .loading-state i.fa-spinner { animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Search */
-        .search-box {
+        /* Log entry */
+        .log-entry {
             display: flex;
-            align-items: center;
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            padding: 0 14px;
-            transition: all var(--transition);
-        }
-        .search-box:focus-within { border-color: var(--accent); }
-        .search-box i { color: var(--text-muted); font-size: 14px; }
-        .search-box input {
-            background: none;
-            border: none;
-            padding: 9px 12px;
-            color: var(--text-primary);
-            font-size: 14px;
-            outline: none;
-            width: 180px;
-            font-family: var(--font);
-        }
-        .search-box input::placeholder { color: var(--text-muted); }
-
-        /* Commands */
-        .commands-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 10px;
-        }
-        .command-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 16px;
-            background: var(--bg-input);
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-color);
-            transition: all var(--transition);
-        }
-        .command-item:hover { border-color: var(--accent); background: var(--bg-hover); }
-        .command-item .cmd {
-            font-family: monospace;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
             font-size: 13px;
-            font-weight: 600;
-            color: var(--accent);
-            background: rgba(108, 92, 231, 0.1);
-            padding: 2px 12px;
-            border-radius: 4px;
-            white-space: nowrap;
+            flex-wrap: wrap;
+            gap: 4px;
         }
-        .command-item .desc { font-size: 13px; color: var(--text-secondary); flex: 1; }
+        .log-entry .time { color: var(--text-muted); font-size: 12px; }
+        .log-entry .action { color: var(--accent-info); font-weight: 500; }
+        .log-entry .user { color: var(--text-secondary); }
+
+        /* Sell Items */
+        .sell-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .sell-item {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 16px;
+            transition: var(--transition);
+        }
+        .sell-item:hover { border-color: var(--accent); }
+        .sell-item .price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-success);
+        }
+        .sell-item .cape {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(116, 185, 255, 0.15);
+            color: var(--accent-info);
+            margin: 4px 0;
+        }
+        .sell-item .note {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(253, 203, 110, 0.1);
+            border-radius: 4px;
+            border-left: 3px solid var(--accent-warning);
+        }
 
         /* Settings */
         .settings-group { display: flex; flex-direction: column; gap: 12px; }
@@ -717,11 +613,48 @@
         }
         .switch input:checked + .slider { background: var(--accent); }
         .switch input:checked + .slider:before { transform: translateX(22px); }
+
         .settings-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
 
-        /* ========================================
-           RESPONSIVE
-        ======================================== */
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: var(--font);
+            transition: var(--transition);
+        }
+        .form-control:focus { border-color: var(--accent); outline: none; }
+        .form-control::placeholder { color: var(--text-muted); }
+        textarea.form-control { min-height: 100px; resize: vertical; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(108, 92, 231, 0.3); }
+        .btn-secondary { background: var(--bg-input); color: var(--text-secondary); }
+        .btn-secondary:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .btn-success { background: var(--accent-success); color: #fff; }
+        .btn-danger { background: var(--accent-danger); color: #fff; }
+        .btn-sm { padding: 4px 12px; font-size: 12px; }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -746,13 +679,7 @@
             .stat-card { padding: 16px; }
             .stat-card .value { font-size: 20px; }
             .user-profile .name { display: none; }
-            .login-box { padding: 24px 16px; }
-            .commands-grid { grid-template-columns: 1fr; }
-            .setting-item { flex-direction: column; align-items: stretch; gap: 12px; }
-            .settings-actions { flex-direction: column; }
-            .card-header { flex-direction: column; align-items: stretch; gap: 12px; }
-            .card-actions { flex-wrap: wrap; }
-            .search-box input { width: 120px; }
+            .sell-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 480px) {
             .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -765,12 +692,12 @@
 <body>
 
 <!-- ============================================
-     SIDEBAR OVERLAY (Mobile)
+     SIDEBAR OVERLAY
 ============================================ -->
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
 <!-- ============================================
-     LOGIN OVERLAY
+     LOGIN
 ============================================ -->
 <div class="login-overlay" id="loginOverlay">
     <div class="login-container">
@@ -797,20 +724,6 @@
 </div>
 
 <!-- ============================================
-     UNAUTHORIZED OVERLAY
-============================================ -->
-<div class="unauthorized-overlay" id="unauthorizedOverlay">
-    <div class="unauthorized-container">
-        <div class="unauthorized-icon"><i class="fas fa-lock"></i></div>
-        <h2>Không có quyền truy cập</h2>
-        <p id="unauthorizedMessage">Bạn không có quyền quản lý server này.</p>
-        <button class="btn btn-secondary" onclick="logout()">
-            <i class="fas fa-sign-out-alt"></i> Đăng xuất
-        </button>
-    </div>
-</div>
-
-<!-- ============================================
      SIDEBAR
 ============================================ -->
 <aside class="sidebar" id="sidebar">
@@ -820,6 +733,7 @@
     </div>
     <nav class="sidebar-nav">
         <a class="active" data-page="overview"><i class="fas fa-th-large"></i> Tổng quan</a>
+        <a data-page="sell"><i class="fas fa-store"></i> Sell Acc</a>
         <a data-page="server"><i class="fas fa-server"></i> Máy chủ</a>
         <a data-page="users"><i class="fas fa-users"></i> Người dùng</a>
         <a data-page="tickets"><i class="fas fa-ticket-alt"></i> Ticket</a>
@@ -833,8 +747,8 @@
         <a data-page="bot-status"><i class="fas fa-robot"></i> Trạng thái Bot</a>
     </nav>
     <div class="sidebar-footer">
-        <span class="status-dot online"></span>
-        <span>Bot Online</span>
+        <span class="status-dot online" id="botStatusDot"></span>
+        <span id="botStatusText">Bot Online</span>
     </div>
 </aside>
 
@@ -875,8 +789,7 @@
                         </div>
                         <div class="dropdown-divider"></div>
                         <button class="dropdown-item danger" onclick="logout()">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>Đăng xuất</span>
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
                         </button>
                     </div>
                 </div>
@@ -887,42 +800,167 @@
     <!-- Page Content -->
     <section class="page-content" id="pageContent">
 
-        <!-- ========== OVERVIEW ========== -->
+        <!-- ========== OVERVIEW - MAIN ========== -->
         <div class="page active" id="page-overview">
+            
+            <!-- === Tin nhắn chào mừng === -->
+            <div style="background:linear-gradient(135deg, rgba(108,92,231,0.1), rgba(162,155,254,0.05));border:1px solid rgba(108,92,231,0.2);border-radius:var(--radius);padding:24px;margin-bottom:24px;">
+                <h2 style="color:var(--text-primary);font-size:20px;margin-bottom:8px;">
+                    <i class="fas fa-hand-wave" style="color:var(--accent);margin-right:10px;"></i>
+                    Chào mừng đến với Vix Community!
+                </h2>
+                <p style="color:var(--text-secondary);font-size:14px;line-height:1.6;">
+                    Đây là Dashboard quản lý hệ thống. Bạn có thể theo dõi thông tin server, quản lý ticket, 
+                    xem thống kê chi tiêu và nhiều tính năng khác. 
+                    <span style="color:var(--accent);font-weight:500;">#VixCommunity #Game #Community</span>
+                </p>
+                <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;">
+                    <span style="background:rgba(108,92,231,0.15);padding:4px 14px;border-radius:50px;font-size:12px;color:var(--accent);">
+                        <i class="fas fa-users"></i> 1.2K+ Thành viên
+                    </span>
+                    <span style="background:rgba(0,184,148,0.15);padding:4px 14px;border-radius:50px;font-size:12px;color:var(--accent-success);">
+                        <i class="fas fa-check-circle"></i> 847 Legit
+                    </span>
+                    <span style="background:rgba(116,185,255,0.15);padding:4px 14px;border-radius:50px;font-size:12px;color:var(--accent-info);">
+                        <i class="fas fa-ticket-alt"></i> 342 Ticket
+                    </span>
+                    <span style="background:rgba(253,203,110,0.15);padding:4px 14px;border-radius:50px;font-size:12px;color:var(--accent-warning);">
+                        <i class="fas fa-coins"></i> 28.5M Chi tiêu
+                    </span>
+                </div>
+            </div>
+
+            <!-- === Stats === -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="top"><span class="label">👥 Người dùng</span><div class="icon purple"><i class="fas fa-users"></i></div></div>
-                    <div class="value" id="statUsers">0</div>
+                    <div class="value" id="statUsers">1,254</div>
                 </div>
                 <div class="stat-card">
                     <div class="top"><span class="label">🎫 Ticket</span><div class="icon blue"><i class="fas fa-ticket-alt"></i></div></div>
-                    <div class="value" id="statTickets">0</div>
+                    <div class="value" id="statTickets">342</div>
                 </div>
                 <div class="stat-card">
                     <div class="top"><span class="label">💰 Tổng chi tiêu</span><div class="icon green"><i class="fas fa-coins"></i></div></div>
-                    <div class="value" id="statSpent">0</div>
+                    <div class="value" id="statSpent">28.5M</div>
                 </div>
                 <div class="stat-card">
                     <div class="top"><span class="label">✅ Legit</span><div class="icon yellow"><i class="fas fa-check-circle"></i></div></div>
-                    <div class="value" id="statLegit">0</div>
+                    <div class="value" id="statLegit">847</div>
                 </div>
                 <div class="stat-card">
-                    <div class="top"><span class="label">🚫 Blacklist</span><div class="icon red"><i class="fas fa-ban"></i></div></div>
-                    <div class="value" id="statBlacklist">0</div>
+                    <div class="top"><span class="label">📦 Stock Premium</span><div class="icon green"><i class="fas fa-box"></i></div></div>
+                    <div class="value" id="statStock">156</div>
                 </div>
                 <div class="stat-card">
-                    <div class="top"><span class="label">🌐 Máy chủ</span><div class="icon purple"><i class="fas fa-server"></i></div></div>
-                    <div class="value" id="statGuilds">0</div>
+                    <div class="top"><span class="label">🤖 Bot Status</span><div class="icon green"><i class="fas fa-robot"></i></div></div>
+                    <div class="value" style="font-size:20px;" id="statBotStatus">🟢 Online</div>
                 </div>
             </div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:24px;">
-                <div class="card">
-                    <div class="card-header"><h3><i class="fas fa-clock"></i> Hoạt động gần đây</h3></div>
-                    <div class="card-body" id="recentActivity"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+
+            <!-- === BXH Chi tiêu === -->
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-trophy"></i> BXH Chi tiêu</h3></div>
+                <div class="card-body" id="bxhContent">
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                        <div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);">
+                            <span style="color:var(--text-primary);font-weight:600;">🥇 kian_nguyen</span>
+                            <span style="color:var(--accent);font-weight:600;">12.5M</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);">
+                            <span style="color:var(--text-primary);font-weight:600;">🥈 quang_nguyen</span>
+                            <span style="color:var(--accent);font-weight:600;">8.2M</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);">
+                            <span style="color:var(--text-primary);font-weight:600;">🥉 thuy_linh</span>
+                            <span style="color:var(--accent);font-weight:600;">5.1M</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);">
+                            <span>4. hoang_tuan</span>
+                            <span>3.8M</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);">
+                            <span>5. mai_anh</span>
+                            <span>2.4M</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="card">
-                    <div class="card-header"><h3><i class="fas fa-trophy"></i> Top chi tiêu</h3></div>
-                    <div class="card-body" id="topSpenders"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+            </div>
+
+            <!-- === Hoạt động gần đây === -->
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-clock"></i> Hoạt động gần đây</h3></div>
+                <div class="card-body" id="recentActivity">
+                    <div class="log-entry"><span class="time">15/01 14:35</span><span class="action">🎫 TICKET_CREATE</span><span class="user">kian_nguyen</span><span>Tạo ticket TICKET-0001</span></div>
+                    <div class="log-entry"><span class="time">15/01 14:20</span><span class="action">✅ LEGIT_ADD</span><span class="user">thuy_linh</span><span>+1 legit từ kian_nguyen</span></div>
+                    <div class="log-entry"><span class="time">15/01 14:00</span><span class="action">💰 ORDER_COMPLETE</span><span class="user">system</span><span>Đơn AB123457 hoàn thành</span></div>
+                    <div class="log-entry"><span class="time">15/01 13:45</span><span class="action">🛒 SELL_ACC_ADD</span><span class="user">admin</span><span>Acc Premium mới: VIP Cape - 1.5M</span></div>
+                    <div class="log-entry"><span class="time">15/01 13:30</span><span class="action">🔨 USER_BAN</span><span class="user">admin</span><span>Ban user spammer#123</span></div>
+                </div>
+            </div>
+
+            <!-- === Tin nhắn cộng đồng === -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;">
+                <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);padding:16px;">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                        <div style="width:36px;height:36px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;">K</div>
+                        <div><strong style="color:var(--text-primary);">kian_nguyen</strong><span style="color:var(--text-muted);font-size:12px;display:block;">15/01 14:30</span></div>
+                    </div>
+                    <p style="color:var(--text-secondary);font-size:14px;">✨ Chào mọi người! Hôm nay có acc VIP mới, giá cực tốt. Mọi người vào sell acc xem nhé! #VixCommunity</p>
+                </div>
+                <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);padding:16px;">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                        <div style="width:36px;height:36px;border-radius:50%;background:var(--accent-success);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;">Q</div>
+                        <div><strong style="color:var(--text-primary);">quang_nguyen</strong><span style="color:var(--text-muted);font-size:12px;display:block;">15/01 13:50</span></div>
+                    </div>
+                    <p style="color:var(--text-secondary);font-size:14px;">🎉 Cảm ơn các bạn đã ủng hộ! Server đang có 847 legit rồi, tiếp tục phát triển nhé! #Legit #Community</p>
+                </div>
+                <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);padding:16px;">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                        <div style="width:36px;height:36px;border-radius:50%;background:var(--accent-warning);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;">T</div>
+                        <div><strong style="color:var(--text-primary);">thuy_linh</strong><span style="color:var(--text-muted);font-size:12px;display:block;">15/01 13:20</span></div>
+                    </div>
+                    <p style="color:var(--text-secondary);font-size:14px;">💰 Ai cần mua mon game thì vào Auto Buy nhé, stock còn nhiều, giá tốt! #AutoBuy #Game</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SELL ACC ========== -->
+        <div class="page" id="page-sell">
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-plus-circle"></i> Đăng Acc Premium</h3></div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>💰 Giá bán <span style="color:var(--accent-danger);">*</span></label>
+                        <input type="text" class="form-control" id="sellPrice" placeholder="Ví dụ: 1.5M, 500K, 2.5M..." />
+                    </div>
+                    <div class="form-group">
+                        <label>🎮 Cape <span style="color:var(--accent-danger);">*</span></label>
+                        <input type="text" class="form-control" id="sellCape" placeholder="Ví dụ: VIP, PREMIUM, LEGEND..." />
+                    </div>
+                    <div class="form-group">
+                        <label>📝 Nội dung <span style="color:var(--accent-danger);">*</span></label>
+                        <textarea class="form-control" id="sellContent" placeholder="Mô tả chi tiết acc..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="addSellAcc()"><i class="fas fa-store"></i> Đăng bán</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-store"></i> Acc Premium đang bán</h3></div>
+                <div class="card-body">
+                    <div class="sell-grid" id="sellGrid"></div>
+                </div>
+            </div>
+
+            <div class="card" style="border-color:var(--accent-warning);">
+                <div class="card-header"><h3><i class="fas fa-info-circle"></i> Lưu ý khi mua</h3></div>
+                <div class="card-body">
+                    <div style="background:rgba(253,203,110,0.1);padding:16px;border-radius:var(--radius-sm);border-left:4px solid var(--accent-warning);">
+                        <p style="color:var(--text-secondary);margin-bottom:8px;">📌 <strong style="color:var(--text-primary);">Kham thảo:</strong> Vui lòng xem kỹ thông tin và hình ảnh trước khi quyết định mua.</p>
+                        <p style="color:var(--text-secondary);margin-bottom:8px;">🛒 <strong style="color:var(--text-primary);">Mua qua server:</strong> Mọi giao dịch đều được thực hiện qua server Discord để đảm bảo an toàn.</p>
+                        <p style="color:var(--text-secondary);">🔒 <strong style="color:var(--text-primary);">Bảo hành:</strong> Acc được bảo hành 7 ngày nếu có vấn đề từ phía người bán.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -931,28 +969,46 @@
         <div class="page" id="page-server">
             <div class="card">
                 <div class="card-header"><h3><i class="fas fa-server"></i> Thông tin máy chủ</h3></div>
-                <div class="card-body" id="serverInfo"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+                <div class="card-body">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;">
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Tên máy chủ</div>
+                            <div style="font-size:20px;font-weight:700;color:var(--text-primary);">Vix Community</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">ID</div>
+                            <div style="font-size:14px;font-weight:600;color:var(--text-primary);font-family:monospace;">1520984545699299428</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Thành viên</div>
+                            <div style="font-size:20px;font-weight:700;color:var(--text-primary);">1,254</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Ngày tạo</div>
+                            <div style="font-size:16px;font-weight:600;color:var(--text-primary);">15/01/2024</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- ========== USERS ========== -->
         <div class="page" id="page-users">
             <div class="card">
-                <div class="card-header">
-                    <h3><i class="fas fa-users"></i> Danh sách người dùng</h3>
-                    <div class="card-actions">
-                        <div class="search-box"><i class="fas fa-search"></i><input type="text" id="userSearch" placeholder="Tìm kiếm..." /></div>
-                        <button class="btn btn-primary" onclick="loadUsers()"><i class="fas fa-sync-alt"></i></button>
-                    </div>
-                </div>
+                <div class="card-header"><h3><i class="fas fa-users"></i> Danh sách người dùng</h3></div>
                 <div class="card-body">
                     <div class="table-container">
                         <table>
                             <thead><tr><th>#</th><th>Người dùng</th><th>Chi tiêu</th><th>Legit</th><th>Trạng thái</th></tr></thead>
-                            <tbody id="userTableBody"><tr><td colspan="5"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></td></tr></tbody>
+                            <tbody>
+                                <tr><td>1</td><td><strong style="color:var(--text-primary);">kian_nguyen</strong></td><td>12.5M</td><td>156</td><td><span class="badge badge-success">Hoạt động</span></td></tr>
+                                <tr><td>2</td><td><strong style="color:var(--text-primary);">quang_nguyen</strong></td><td>8.2M</td><td>89</td><td><span class="badge badge-success">Hoạt động</span></td></tr>
+                                <tr><td>3</td><td><strong style="color:var(--text-primary);">thuy_linh</strong></td><td>5.1M</td><td>45</td><td><span class="badge badge-success">Hoạt động</span></td></tr>
+                                <tr><td>4</td><td>hoang_tuan</td><td>3.8M</td><td>32</td><td><span class="badge badge-success">Hoạt động</span></td></tr>
+                                <tr><td>5</td><td>mai_anh</td><td>2.4M</td><td>28</td><td><span class="badge badge-success">Hoạt động</span></td></tr>
+                            </tbody>
                         </table>
                     </div>
-                    <div class="table-footer"><span id="userCount">0 người dùng</span></div>
                 </div>
             </div>
         </div>
@@ -965,21 +1021,25 @@
                     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px;">
                         <div style="background:var(--bg-input);padding:12px;border-radius:var(--radius-sm);text-align:center;">
                             <div style="font-size:12px;color:var(--text-muted);">Đang mở</div>
-                            <div style="font-size:24px;font-weight:700;color:var(--text-primary);" id="ticketOpen">0</div>
+                            <div style="font-size:24px;font-weight:700;color:var(--text-primary);">18</div>
                         </div>
                         <div style="background:var(--bg-input);padding:12px;border-radius:var(--radius-sm);text-align:center;">
                             <div style="font-size:12px;color:var(--text-muted);">Đã đóng</div>
-                            <div style="font-size:24px;font-weight:700;color:var(--text-primary);" id="ticketClosed">0</div>
+                            <div style="font-size:24px;font-weight:700;color:var(--text-primary);">324</div>
                         </div>
                         <div style="background:var(--bg-input);padding:12px;border-radius:var(--radius-sm);text-align:center;">
                             <div style="font-size:12px;color:var(--text-muted);">Tổng</div>
-                            <div style="font-size:24px;font-weight:700;color:var(--text-primary);" id="ticketTotal">0</div>
+                            <div style="font-size:24px;font-weight:700;color:var(--text-primary);">342</div>
                         </div>
                     </div>
                     <div class="table-container">
                         <table>
                             <thead><tr><th>ID</th><th>Chủ sở hữu</th><th>Loại</th><th>Trạng thái</th><th>Ngày tạo</th></tr></thead>
-                            <tbody id="ticketTableBody"><tr><td colspan="5"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></td></tr></tbody>
+                            <tbody>
+                                <tr><td><strong style="color:var(--text-primary);font-family:monospace;">TICKET-0001</strong></td><td>kian_nguyen</td><td>Giao dịch</td><td><span class="badge badge-success">OPEN</span></td><td>15/01</td></tr>
+                                <tr><td><strong style="color:var(--text-primary);font-family:monospace;">TICKET-0002</strong></td><td>quang_nguyen</td><td>Hỗ trợ</td><td><span class="badge badge-info">CLAIMED</span></td><td>15/01</td></tr>
+                                <tr><td><strong style="color:var(--text-primary);font-family:monospace;">TICKET-0003</strong></td><td>thuy_linh</td><td>Báo cáo</td><td><span class="badge badge-danger">CLOSED</span></td><td>14/01</td></tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -994,7 +1054,10 @@
                     <div class="table-container">
                         <table>
                             <thead><tr><th>Mã đơn</th><th>Người mua</th><th>Số lượng</th><th>Tổng tiền</th><th>Trạng thái</th></tr></thead>
-                            <tbody id="orderTableBody"><tr><td colspan="5"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></td></tr></tbody>
+                            <tbody>
+                                <tr><td><strong style="color:var(--text-primary);font-family:monospace;">AB123456</strong></td><td>kian_nguyen</td><td>1.5M</td><td>750K</td><td><span class="badge badge-warning">PENDING</span></td></tr>
+                                <tr><td><strong style="color:var(--text-primary);font-family:monospace;">AB123457</strong></td><td>quang_nguyen</td><td>2M</td><td>1M</td><td><span class="badge badge-success">COMPLETED</span></td></tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -1005,7 +1068,25 @@
         <div class="page" id="page-stock">
             <div class="card">
                 <div class="card-header"><h3><i class="fas fa-boxes"></i> Quản lý kho hàng</h3></div>
-                <div class="card-body" id="stockGrid"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+                <div class="card-body">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;">
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;border:1px solid var(--border-color);">
+                            <div style="color:var(--text-secondary);">Mon Game</div>
+                            <div style="font-size:28px;font-weight:700;color:var(--text-primary);">12.5M</div>
+                            <div style="color:var(--text-muted);">500 VNĐ/1m</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;border:1px solid var(--border-color);">
+                            <div style="color:var(--text-secondary);">Voucher</div>
+                            <div style="font-size:28px;font-weight:700;color:var(--text-primary);">250</div>
+                            <div style="color:var(--text-muted);">10K VNĐ</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;border:1px solid var(--border-color);">
+                            <div style="color:var(--text-secondary);">Acc Premium</div>
+                            <div style="font-size:28px;font-weight:700;color:var(--text-primary);">156</div>
+                            <div style="color:var(--text-muted);">Giá theo acc</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1013,7 +1094,22 @@
         <div class="page" id="page-economy">
             <div class="card">
                 <div class="card-header"><h3><i class="fas fa-coins"></i> Thống kê kinh tế</h3></div>
-                <div class="card-body" id="economyStats"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+                <div class="card-body">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;">
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Tổng chi tiêu</div>
+                            <div style="font-size:24px;font-weight:700;color:var(--text-primary);">28.5M</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Giao dịch</div>
+                            <div style="font-size:24px;font-weight:700;color:var(--text-primary);">1,247</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Top chi tiêu</div>
+                            <div style="font-size:18px;font-weight:600;color:var(--text-primary);">kian_nguyen</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1021,7 +1117,26 @@
         <div class="page" id="page-moderation">
             <div class="card">
                 <div class="card-header"><h3><i class="fas fa-gavel"></i> Kiểm duyệt</h3></div>
-                <div class="card-body" id="moderationStats"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+                <div class="card-body">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;">
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">⚠️ Cảnh báo</div>
+                            <div style="font-size:28px;font-weight:700;color:var(--accent-warning);">89</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">🔨 Ban</div>
+                            <div style="font-size:28px;font-weight:700;color:var(--accent-danger);">12</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">👢 Kick</div>
+                            <div style="font-size:28px;font-weight:700;color:var(--accent-danger);">34</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">🔇 Mute</div>
+                            <div style="font-size:28px;font-weight:700;color:var(--accent-warning);">56</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1029,13 +1144,12 @@
         <div class="page" id="page-logs">
             <div class="card">
                 <div class="card-header"><h3><i class="fas fa-history"></i> Nhật ký hệ thống</h3></div>
-                <div class="card-body">
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>Thời gian</th><th>Hành động</th><th>Người dùng</th><th>Chi tiết</th></tr></thead>
-                            <tbody id="logTableBody"><tr><td colspan="4"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></td></tr></tbody>
-                        </table>
-                    </div>
+                <div class="card-body" id="logsContainer">
+                    <div class="log-entry"><span class="time">15/01 14:35</span><span class="action">TICKET_CREATE</span><span class="user">kian_nguyen</span><span>Tạo ticket TICKET-0001</span></div>
+                    <div class="log-entry"><span class="time">15/01 14:20</span><span class="action">LEGIT_ADD</span><span class="user">thuy_linh</span><span>+1 legit từ kian_nguyen</span></div>
+                    <div class="log-entry"><span class="time">15/01 14:00</span><span class="action">ORDER_COMPLETE</span><span class="user">system</span><span>Đơn AB123457 hoàn thành</span></div>
+                    <div class="log-entry"><span class="time">15/01 13:45</span><span class="action">SELL_ACC_ADD</span><span class="user">admin</span><span>Acc VIP - 1.5M</span></div>
+                    <div class="log-entry"><span class="time">15/01 13:30</span><span class="action">USER_BAN</span><span class="user">admin</span><span>Ban user spammer#123</span></div>
                 </div>
             </div>
         </div>
@@ -1043,14 +1157,58 @@
         <!-- ========== COMMANDS ========== -->
         <div class="page" id="page-commands">
             <div class="card">
-                <div class="card-header">
-                    <h3><i class="fas fa-terminal"></i> Danh sách lệnh</h3>
-                    <div class="card-actions">
-                        <div class="search-box"><i class="fas fa-search"></i><input type="text" id="commandSearch" placeholder="Tìm lệnh..." /></div>
-                    </div>
-                </div>
+                <div class="card-header"><h3><i class="fas fa-terminal"></i> Danh sách lệnh</h3></div>
                 <div class="card-body">
-                    <div class="commands-grid" id="commandsGrid"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;">
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                            <span style="font-family:monospace;font-size:13px;font-weight:600;color:var(--accent);">/setup_ticket</span>
+                            <span style="font-size:13px;color:var(--text-secondary);">Panel ticket</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                            <span style="font-family:monospace;font-size:13px;font-weight:600;color:var(--accent);">/ticket</span>
+                            <span style="font-size:13px;color:var(--text-secondary);">Tạo ticket</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                            <span style="font-family:monospace;font-size:13px;font-weight:600;color:var(--accent);">/lockticket</span>
+                            <span style="font-size:13px;color:var(--text-secondary);">Khóa ticket</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                            <span style="font-family:monospace;font-size:13px;font-weight:600;color:var(--accent);">/bxh_chitieu</span>
+                            <span style="font-size:13px;color:var(--text-secondary);">BXH chi tiêu</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                            <span style="font-family:monospace;font-size:13px;font-weight:600;color:var(--accent);">/checklegit</span>
+                            <span style="font-size:13px;color:var(--text-secondary);">Tổng legit</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                            <span style="font-family:monospace;font-size:13px;font-weight:600;color:var(--accent);">/setup_autobuy</span>
+                            <span style="font-size:13px;color:var(--text-secondary);">Panel auto buy</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                            <span style="font-family:monospace;font-size:13px;font-weight:600;color:var(--accent);">/addstock</span>
+                            <span style="font-size:13px;color:var(--text-secondary);">Thêm stock</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                            <span style="font-family:monospace;font-size:13px;font-weight:600;color:var(--accent);">/automod</span>
+                            <span style="font-size:13px;color:var(--text-secondary);">Cấu hình AutoMod</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                            <span style="font-family:monospace;font-size:13px;font-weight:600;color:var(--accent);">/shop</span>
+                            <span style="font-size:13px;color:var(--text-secondary);">Cửa hàng</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                            <span style="font-family:monospace;font-size:13px;font-weight:600;color:var(--accent);">/level</span>
+                            <span style="font-size:13px;color:var(--text-secondary);">Hệ thống cấp độ</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                            <span style="font-family:monospace;font-size:13px;font-weight:600;color:var(--accent);">/my</span>
+                            <span style="font-size:13px;color:var(--text-secondary);">Thông tin tài khoản</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                            <span style="font-family:monospace;font-size:13px;font-weight:600;color:var(--accent);">/help</span>
+                            <span style="font-size:13px;color:var(--text-secondary);">Trợ giúp</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1060,6 +1218,7 @@
             <div class="card">
                 <div class="card-header"><h3><i class="fas fa-cog"></i> Cài đặt hệ thống</h3></div>
                 <div class="card-body">
+                    <h4 style="color:var(--text-primary);margin-bottom:12px;">🔧 Cài đặt chung</h4>
                     <div class="settings-group">
                         <div class="setting-item">
                             <div class="setting-info"><span class="setting-label">🔧 Chế độ bảo trì</span><span class="setting-desc">Bật/tắt chế độ bảo trì hệ thống</span></div>
@@ -1069,6 +1228,10 @@
                             <div class="setting-info"><span class="setting-label">🔒 Lockdown</span><span class="setting-desc">Khóa toàn bộ hệ thống</span></div>
                             <label class="switch"><input type="checkbox" id="lockdownToggle" /><span class="slider"></span></label>
                         </div>
+                    </div>
+
+                    <h4 style="color:var(--text-primary);margin:20px 0 12px;">🤖 Cài đặt Bot</h4>
+                    <div class="settings-group">
                         <div class="setting-item">
                             <div class="setting-info"><span class="setting-label">🤖 Auto Mod</span><span class="setting-desc">Bật/tắt hệ thống tự động kiểm duyệt</span></div>
                             <label class="switch"><input type="checkbox" id="automodToggle" /><span class="slider"></span></label>
@@ -1077,9 +1240,18 @@
                             <div class="setting-info"><span class="setting-label">🖼️ Image Blacklist</span><span class="setting-desc">Bật/tắt chặn ảnh bị cấm</span></div>
                             <label class="switch"><input type="checkbox" id="imageBlockToggle" /><span class="slider"></span></label>
                         </div>
+                        <div class="setting-item">
+                            <div class="setting-info"><span class="setting-label">🔗 Filter Links</span><span class="setting-desc">Tự động xóa link spam</span></div>
+                            <label class="switch"><input type="checkbox" id="filterLinksToggle" /><span class="slider"></span></label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info"><span class="setting-label">🔇 Auto Mute</span><span class="setting-desc">Tự động mute người dùng vi phạm</span></div>
+                            <label class="switch"><input type="checkbox" id="autoMuteToggle" /><span class="slider"></span></label>
+                        </div>
                     </div>
+
                     <div class="settings-actions">
-                        <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Lưu</button>
+                        <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Lưu cài đặt</button>
                         <button class="btn btn-secondary" onclick="resetSettings()"><i class="fas fa-undo"></i> Đặt lại</button>
                     </div>
                 </div>
@@ -1090,7 +1262,34 @@
         <div class="page" id="page-bot-status">
             <div class="card">
                 <div class="card-header"><h3><i class="fas fa-robot"></i> Trạng thái Bot</h3></div>
-                <div class="card-body" id="botStatusContent"><div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Đang tải...</p></div></div>
+                <div class="card-body">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;">
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Trạng thái</div>
+                            <div style="font-size:20px;font-weight:700;color:var(--accent-success);margin-top:4px;">🟢 Online</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Uptime</div>
+                            <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">12h 34m</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Ping</div>
+                            <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">42ms</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Máy chủ</div>
+                            <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">1</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Người dùng</div>
+                            <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">1,254</div>
+                        </div>
+                        <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
+                            <div style="font-size:12px;color:var(--text-muted);">Bộ nhớ</div>
+                            <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">156 MB</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1098,113 +1297,54 @@
 </main>
 
 <!-- ============================================
-     TOAST CONTAINER
+     TOAST
 ============================================ -->
 <div id="toastContainer" style="position:fixed;bottom:24px;right:24px;z-index:99999;display:flex;flex-direction:column;gap:10px;max-width:400px;width:100%;"></div>
 
 <script>
 // ============================================
-// CONFIGURATION - THAY ĐỔI TẠI ĐÂY
+// CONFIG - ĐÃ ĐIỀN SẴN CLIENT ID
 // ============================================
 const CONFIG = {
-    // 🔥 QUAN TRỌNG: Thay CLIENT_ID bằng Client ID của bạn 🔥
     DISCORD_CLIENT_ID: '1537239046466834593',
-    // 🔥 QUAN TRỌNG: Thay bằng URL GitHub Pages của bạn 🔥
     REDIRECT_URI: 'https://khanhne1121.github.io/Vix-Dashboard/',
-    // Guild ID để kiểm tra quyền
     GUILD_ID: '1520984545699299428'
 };
 
 // ============================================
-// MOCK DATA
+// SELL ACC DATA
 // ============================================
-const MOCK = {
-    stats: {
-        totalUsers: 1254,
-        totalTickets: 342,
-        totalSpent: '28.5M',
-        totalLegit: 847,
-        totalBlacklist: 23,
-        totalGuilds: 5
+let sellItems = [
+    {
+        id: 1,
+        price: '1.5M',
+        cape: 'VIP',
+        content: 'Acc VIP Full skill, nhiều skin hiếm, đã qua xác thực',
+        date: '15/01/2024'
     },
-    users: [
-        { username: 'kian_nguyen', spent: '12.5M', legit: 156 },
-        { username: 'quang_nguyen', spent: '8.2M', legit: 89 },
-        { username: 'thuy_linh', spent: '5.1M', legit: 45 },
-        { username: 'hoang_tuan', spent: '3.8M', legit: 32 },
-        { username: 'mai_anh', spent: '2.4M', legit: 28 },
-        { username: 'duc_minh', spent: '1.9M', legit: 15 },
-        { username: 'phuong_nam', spent: '1.2M', legit: 10 },
-        { username: 'bao_chau', spent: '850K', legit: 8 },
-        { username: 'minh_quan', spent: '620K', legit: 5 },
-        { username: 'ngoc_tram', spent: '410K', legit: 3 }
-    ],
-    tickets: [
-        { id: 'TICKET-0001', owner: 'kian_nguyen', type: 'Giao dịch', status: 'OPEN', created: '2024-01-15' },
-        { id: 'TICKET-0002', owner: 'quang_nguyen', type: 'Hỗ trợ', status: 'CLAIMED', created: '2024-01-15' },
-        { id: 'TICKET-0003', owner: 'thuy_linh', type: 'Báo cáo', status: 'CLOSED', created: '2024-01-14' }
-    ],
-    orders: [
-        { id: 'AB123456', user: 'kian_nguyen', amount: '1.5M', total: '750K', status: 'PENDING' },
-        { id: 'AB123457', user: 'quang_nguyen', amount: '2M', total: '1M', status: 'COMPLETED' }
-    ],
-    stock: [
-        { name: 'Mon Game', amount: '12.5M', price: '500 VNĐ/1m' },
-        { name: 'Voucher', amount: '250', price: '10K VNĐ' }
-    ],
-    logs: [
-        { time: '2024-01-15 14:35', action: 'TICKET_CREATE', user: 'kian_nguyen', details: 'Tạo ticket mới' },
-        { time: '2024-01-15 14:20', action: 'USER_BAN', user: 'admin', details: 'Ban user spammer' }
-    ],
-    commands: [
-        { cmd: '/setup_ticket', desc: 'Tạo panel ticket' },
-        { cmd: '/ticket', desc: 'Tạo ticket nhanh' },
-        { cmd: '/lockticket', desc: 'Khóa ticket' },
-        { cmd: '/bxh_chitieu', desc: 'BXH chi tiêu' },
-        { cmd: '/checklegit', desc: 'Tổng legit' },
-        { cmd: '/setup_autobuy', desc: 'Tạo panel auto buy' },
-        { cmd: '/addstock', desc: 'Thêm stock' },
-        { cmd: '/automod', desc: 'Cấu hình AutoMod' },
-        { cmd: '/shop', desc: 'Cửa hàng' },
-        { cmd: '/level', desc: 'Hệ thống cấp độ' },
-        { cmd: '/my', desc: 'Thông tin tài khoản' },
-        { cmd: '/help', desc: 'Trợ giúp' },
-        { cmd: '/owner cash', desc: 'Quản lý cash' },
-        { cmd: '/owner maintenance', desc: 'Bảo trì' }
-    ],
-    botStatus: {
-        status: 'online',
-        uptime: '12h 34m',
-        ping: '42ms',
-        guilds: 5,
-        users: 1254,
-        memory: '156 MB'
+    {
+        id: 2,
+        price: '2.5M',
+        cape: 'PREMIUM',
+        content: 'Acc PREMIUM cấp cao, đầy đủ vật phẩm, sẵn sàng chơi ngay',
+        date: '14/01/2024'
+    },
+    {
+        id: 3,
+        price: '800K',
+        cape: 'LEGEND',
+        content: 'Acc LEGEND cấp độ cao, nhiều thành tích, giá tốt',
+        date: '13/01/2024'
     }
-};
+];
 
 // ============================================
-// STATE
-// ============================================
-let state = {
-    currentPage: 'overview',
-    isAuthenticated: false,
-    user: null,
-    accessToken: null,
-    permission: { role: 'USER', hasAccess: true }
-};
-
-// ============================================
-// DOM REFS
-// ============================================
-const $ = (id) => document.getElementById(id);
-
-// ============================================
-// TOAST SYSTEM
+// TOAST
 // ============================================
 function showToast(message, type = 'info', title = '') {
-    const container = $('toastContainer');
-    const toast = document.createElement('div');
+    const container = document.getElementById('toastContainer');
     const colors = { success: '#00b894', error: '#e17055', warning: '#fdcb6e', info: '#6c5ce7' };
+    const toast = document.createElement('div');
     toast.style.cssText = `
         background: #1a1a2e; border: 1px solid #2a2a40; border-radius: 10px;
         padding: 14px 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
@@ -1222,31 +1362,72 @@ function showToast(message, type = 'info', title = '') {
 }
 
 // ============================================
-// DISCORD OAUTH2 - IMPLICIT FLOW
+// SELL ACC
+// ============================================
+function addSellAcc() {
+    const price = document.getElementById('sellPrice').value.trim();
+    const cape = document.getElementById('sellCape').value.trim();
+    const content = document.getElementById('sellContent').value.trim();
+
+    if (!price || !cape || !content) {
+        showToast('Vui lòng điền đầy đủ thông tin!', 'error');
+        return;
+    }
+
+    sellItems.unshift({
+        id: Date.now(),
+        price: price,
+        cape: cape,
+        content: content,
+        date: new Date().toLocaleDateString('vi-VN')
+    });
+
+    document.getElementById('sellPrice').value = '';
+    document.getElementById('sellCape').value = '';
+    document.getElementById('sellContent').value = '';
+
+    renderSellItems();
+    showToast('Đã đăng acc thành công!', 'success');
+}
+
+function renderSellItems() {
+    const grid = document.getElementById('sellGrid');
+    if (sellItems.length === 0) {
+        grid.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-muted);"><i class="fas fa-store" style="font-size:36px;display:block;margin-bottom:12px;"></i><p>Chưa có acc nào đang bán</p></div>`;
+        return;
+    }
+    grid.innerHTML = sellItems.map(item => `
+        <div class="sell-item">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div class="price">${item.price}</div>
+                <span class="cape">${item.cape}</span>
+            </div>
+            <p style="color:var(--text-secondary);margin:8px 0;font-size:14px;">${item.content}</p>
+            <div class="note">📅 Đăng: ${item.date} | 🛒 Mua qua server Discord</div>
+            <button class="btn btn-sm btn-success" style="margin-top:8px;" onclick="showToast('Vui lòng vào server Discord để mua acc này!', 'info')">
+                <i class="fas fa-shopping-cart"></i> Mua ngay
+            </button>
+        </div>
+    `).join('');
+}
+
+// ============================================
+// AUTH
 // ============================================
 function loginWithDiscord() {
     const clientId = CONFIG.DISCORD_CLIENT_ID;
     const redirectUri = encodeURIComponent(CONFIG.REDIRECT_URI);
     const scope = 'identify guilds';
-    const responseType = 'token';
-    
-    const url = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}`;
-    
-    window.location.href = url;
+    window.location.href = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=${scope}`;
 }
 
 function handleOAuthCallback() {
-    // Lấy access_token từ URL hash
     const hash = window.location.hash;
     if (hash && hash.includes('access_token=')) {
         const params = new URLSearchParams(hash.slice(1));
         const accessToken = params.get('access_token');
-        
         if (accessToken) {
-            state.accessToken = accessToken;
-            // Xóa hash khỏi URL
             window.history.replaceState({}, document.title, window.location.pathname);
-            // Fetch user info
             fetchUserInfo(accessToken);
         }
     }
@@ -1254,109 +1435,62 @@ function handleOAuthCallback() {
 
 async function fetchUserInfo(accessToken) {
     try {
-        // Get user info
         const userRes = await fetch('https://discord.com/api/users/@me', {
             headers: { 'Authorization': `Bearer ${accessToken}` }
         });
         if (!userRes.ok) throw new Error('Failed to fetch user');
         const user = await userRes.json();
 
-        // Get user guilds
-        const guildRes = await fetch('https://discord.com/api/users/@me/guilds', {
-            headers: { 'Authorization': `Bearer ${accessToken}` }
-        });
-        const guilds = await guildRes.json();
+        document.getElementById('loginOverlay').classList.add('hidden');
+        document.getElementById('userProfile').style.display = 'flex';
+        document.getElementById('userDisplayName').textContent = user.username;
+        document.getElementById('dropdownUsername').textContent = user.username;
+        document.getElementById('dropdownUserId').textContent = `ID: ${user.id}`;
 
-        // Check permission
-        const guild = guilds.find(g => g.id === CONFIG.GUILD_ID);
-        let permission = { role: 'USER', hasAccess: false };
-        
-        if (guild) {
-            // Check if user is owner of the guild
-            if (guild.owner) {
-                permission = { role: 'OWNER', hasAccess: true };
-            } else {
-                // Check permissions
-                const perms = guild.permissions || 0;
-                const ADMIN_PERMISSION = 0x8;
-                if (perms & ADMIN_PERMISSION) {
-                    permission = { role: 'ADMIN', hasAccess: true };
-                } else {
-                    permission = { role: 'USER', hasAccess: true };
-                }
-            }
+        if (user.avatar) {
+            const url = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=64`;
+            document.getElementById('avatarImg').src = url;
+            document.getElementById('avatarImg').style.display = 'block';
+            document.getElementById('avatarIcon').style.display = 'none';
+            document.getElementById('dropdownAvatar').src = url;
         }
 
-        state.isAuthenticated = true;
-        state.user = user;
-        state.permission = permission;
-
-        showDashboard();
+        localStorage.setItem('discord_user', JSON.stringify(user));
+        localStorage.setItem('discord_token', accessToken);
         showToast(`Chào mừng ${user.username}!`, 'success');
-
     } catch (error) {
         showToast('Lỗi đăng nhập: ' + error.message, 'error');
-        showLogin();
     }
 }
 
-// ============================================
-// AUTHENTICATION UI
-// ============================================
-function showLogin() {
-    $('loginOverlay').classList.remove('hidden');
-    $('unauthorizedOverlay').classList.remove('show');
-    $('userProfile').style.display = 'none';
-}
-
-function showDashboard() {
-    $('loginOverlay').classList.add('hidden');
-    $('unauthorizedOverlay').classList.remove('show');
-    $('userProfile').style.display = 'flex';
-
-    if (state.user) {
-        const name = state.user.username || 'User';
-        $('userDisplayName').textContent = name;
-        $('dropdownUsername').textContent = name;
-        $('dropdownUserId').textContent = `ID: ${state.user.id}`;
-
-        if (state.user.avatar) {
-            const url = `https://cdn.discordapp.com/avatars/${state.user.id}/${state.user.avatar}.png?size=64`;
-            $('avatarImg').src = url;
-            $('avatarImg').style.display = 'block';
-            $('avatarIcon').style.display = 'none';
-            $('dropdownAvatar').src = url;
-        } else {
-            $('avatarImg').style.display = 'none';
-            $('avatarIcon').style.display = 'block';
-        }
+function checkSavedLogin() {
+    const savedUser = localStorage.getItem('discord_user');
+    if (savedUser) {
+        try {
+            const user = JSON.parse(savedUser);
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('userProfile').style.display = 'flex';
+            document.getElementById('userDisplayName').textContent = user.username;
+            document.getElementById('dropdownUsername').textContent = user.username;
+            document.getElementById('dropdownUserId').textContent = `ID: ${user.id}`;
+            if (user.avatar) {
+                const url = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=64`;
+                document.getElementById('avatarImg').src = url;
+                document.getElementById('avatarImg').style.display = 'block';
+                document.getElementById('avatarIcon').style.display = 'none';
+                document.getElementById('dropdownAvatar').src = url;
+            }
+            return true;
+        } catch { return false; }
     }
-
-    // Permission
-    const roleMap = {
-        'OWNER': { icon: 'fa-crown', color: '#f1c40f', label: 'Owner' },
-        'ADMIN': { icon: 'fa-shield-alt', color: '#e17055', label: 'Admin' },
-        'STAFF': { icon: 'fa-user-tie', color: '#74b9ff', label: 'Staff' },
-        'USER': { icon: 'fa-user', color: '#6c5ce7', label: 'User' }
-    };
-    const role = roleMap[state.permission?.role] || roleMap.USER;
-    $('permissionText').innerHTML = `<i class="fas ${role.icon}" style="color:${role.color};"></i> Quyền: ${role.label}`;
-
-    loadPageData(state.currentPage);
-}
-
-function showUnauthorized(message) {
-    $('loginOverlay').classList.add('hidden');
-    $('unauthorizedOverlay').classList.add('show');
-    $('unauthorizedMessage').textContent = message || 'Bạn không có quyền truy cập.';
-    $('userProfile').style.display = 'none';
+    return false;
 }
 
 function logout() {
-    state.isAuthenticated = false;
-    state.user = null;
-    state.accessToken = null;
-    showLogin();
+    localStorage.removeItem('discord_user');
+    localStorage.removeItem('discord_token');
+    document.getElementById('loginOverlay').classList.remove('hidden');
+    document.getElementById('userProfile').style.display = 'none';
     showToast('Đã đăng xuất!', 'success');
 }
 
@@ -1364,356 +1498,107 @@ function logout() {
 // NAVIGATION
 // ============================================
 function navigateTo(page) {
-    if (!state.isAuthenticated) return;
-    state.currentPage = page;
-
     document.querySelectorAll('.sidebar-nav a').forEach(el => {
         el.classList.toggle('active', el.dataset.page === page);
     });
-
     document.querySelectorAll('.page').forEach(el => {
         el.classList.toggle('active', el.id === `page-${page}`);
     });
-
     const titles = {
-        overview: 'Tổng quan', server: 'Máy chủ', users: 'Người dùng',
+        overview: 'Tổng quan', sell: 'Sell Acc', server: 'Máy chủ', users: 'Người dùng',
         tickets: 'Ticket', orders: 'Đơn hàng', stock: 'Kho hàng',
         economy: 'Kinh tế', moderation: 'Kiểm duyệt', logs: 'Nhật ký',
         commands: 'Lệnh', settings: 'Cài đặt', 'bot-status': 'Trạng thái Bot'
     };
-    $('pageTitle').textContent = titles[page] || 'Dashboard';
+    document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
     closeSidebar();
-    loadPageData(page);
 }
 
 function openSidebar() {
-    $('sidebar').classList.add('open');
-    $('sidebarOverlay').classList.add('active');
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('sidebarOverlay').classList.add('active');
 }
 function closeSidebar() {
-    $('sidebar').classList.remove('open');
-    $('sidebarOverlay').classList.remove('active');
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('active');
 }
 
 // ============================================
-// LOAD DATA
+// SETTINGS
 // ============================================
-async function loadPageData(page) {
-    try {
-        switch(page) {
-            case 'overview': loadOverview(); break;
-            case 'server': loadServer(); break;
-            case 'users': loadUsers(); break;
-            case 'tickets': loadTickets(); break;
-            case 'orders': loadOrders(); break;
-            case 'stock': loadStock(); break;
-            case 'economy': loadEconomy(); break;
-            case 'moderation': loadModeration(); break;
-            case 'logs': loadLogs(); break;
-            case 'commands': loadCommands(); break;
-            case 'settings': loadSettings(); break;
-            case 'bot-status': loadBotStatus(); break;
-        }
-    } catch(e) {
-        showToast('Lỗi tải dữ liệu: ' + e.message, 'error');
-    }
-}
-
-// ============================================
-// LOAD FUNCTIONS
-// ============================================
-function loadOverview() {
-    const stats = MOCK.stats;
-    $('statUsers').textContent = stats.totalUsers;
-    $('statTickets').textContent = stats.totalTickets;
-    $('statSpent').textContent = stats.totalSpent;
-    $('statLegit').textContent = stats.totalLegit;
-    $('statBlacklist').textContent = stats.totalBlacklist;
-    $('statGuilds').textContent = stats.totalGuilds;
-
-    const recent = $('recentActivity');
-    if (MOCK.logs.length) {
-        recent.innerHTML = MOCK.logs.slice(0,5).map(l => `
-            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-color);">
-                <span style="color:var(--text-secondary);font-size:13px;">${l.action}</span>
-                <span style="color:var(--text-muted);font-size:12px;">${l.user} • ${l.time}</span>
-            </div>
-        `).join('');
-    } else {
-        recent.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-inbox"></i><p>Chưa có hoạt động</p></div>`;
-    }
-
-    const spenders = $('topSpenders');
-    if (MOCK.users.length) {
-        spenders.innerHTML = MOCK.users.slice(0,5).map((u,i) => `
-            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-color);">
-                <span style="color:var(--text-secondary);font-size:13px;">${i+1}. ${u.username}</span>
-                <span style="color:var(--accent);font-weight:600;">${u.spent}</span>
-            </div>
-        `).join('');
-    } else {
-        spenders.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-inbox"></i><p>Chưa có dữ liệu</p></div>`;
-    }
-}
-
-function loadServer() {
-    $('serverInfo').innerHTML = `
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;">
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">Tên máy chủ</div>
-                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">Vix Community</div>
-            </div>
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">ID</div>
-                <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-top:4px;font-family:monospace;">${CONFIG.GUILD_ID}</div>
-            </div>
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">Thành viên</div>
-                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">${MOCK.stats.totalUsers}</div>
-            </div>
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">Ngày tạo</div>
-                <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-top:4px;">15/01/2024</div>
-            </div>
-        </div>
-    `;
-}
-
-function loadUsers() {
-    const tbody = $('userTableBody');
-    if (MOCK.users.length) {
-        tbody.innerHTML = MOCK.users.map((u,i) => `
-            <tr>
-                <td>${i+1}</td>
-                <td><strong style="color:var(--text-primary);">${u.username}</strong></td>
-                <td>${u.spent}</td>
-                <td>${u.legit}</td>
-                <td><span class="badge badge-success">Hoạt động</span></td>
-            </tr>
-        `).join('');
-        $('userCount').textContent = `${MOCK.users.length} người dùng`;
-    } else {
-        tbody.innerHTML = `<tr><td colspan="5"><div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-users"></i><p>Không có dữ liệu</p></div></td></tr>`;
-    }
-}
-
-function loadTickets() {
-    const tickets = MOCK.tickets;
-    $('ticketOpen').textContent = tickets.filter(t => t.status !== 'CLOSED').length;
-    $('ticketClosed').textContent = tickets.filter(t => t.status === 'CLOSED').length;
-    $('ticketTotal').textContent = tickets.length;
-
-    const tbody = $('ticketTableBody');
-    if (tickets.length) {
-        const statusMap = { 'OPEN': 'badge-success', 'CLAIMED': 'badge-info', 'CLOSED': 'badge-danger' };
-        tbody.innerHTML = tickets.map(t => `
-            <tr>
-                <td><strong style="color:var(--text-primary);font-family:monospace;">${t.id}</strong></td>
-                <td>${t.owner}</td>
-                <td>${t.type}</td>
-                <td><span class="badge ${statusMap[t.status] || 'badge-secondary'}">${t.status}</span></td>
-                <td>${t.created}</td>
-            </tr>
-        `).join('');
-    } else {
-        tbody.innerHTML = `<tr><td colspan="5"><div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-ticket-alt"></i><p>Chưa có ticket</p></div></td></tr>`;
-    }
-}
-
-function loadOrders() {
-    const tbody = $('orderTableBody');
-    if (MOCK.orders.length) {
-        const statusMap = { 'PENDING': 'badge-warning', 'COMPLETED': 'badge-success' };
-        tbody.innerHTML = MOCK.orders.map(o => `
-            <tr>
-                <td><strong style="color:var(--text-primary);font-family:monospace;">${o.id}</strong></td>
-                <td>${o.user}</td>
-                <td>${o.amount}</td>
-                <td>${o.total}</td>
-                <td><span class="badge ${statusMap[o.status] || 'badge-secondary'}">${o.status}</span></td>
-            </tr>
-        `).join('');
-    } else {
-        tbody.innerHTML = `<tr><td colspan="5"><div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-shopping-cart"></i><p>Chưa có đơn hàng</p></div></td></tr>`;
-    }
-}
-
-function loadStock() {
-    const grid = $('stockGrid');
-    if (MOCK.stock.length) {
-        grid.innerHTML = MOCK.stock.map(item => `
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;border:1px solid var(--border-color);">
-                <div style="color:var(--text-secondary);font-size:14px;">${item.name}</div>
-                <div style="font-size:28px;font-weight:700;color:var(--text-primary);margin:4px 0;">${item.amount}</div>
-                <div style="color:var(--text-muted);font-size:13px;">${item.price}</div>
-            </div>
-        `).join('');
-    } else {
-        grid.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-boxes"></i><p>Kho hàng trống</p></div>`;
-    }
-}
-
-function loadEconomy() {
-    $('economyStats').innerHTML = `
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;">
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">Tổng chi tiêu</div>
-                <div style="font-size:24px;font-weight:700;color:var(--text-primary);margin-top:4px;">${MOCK.stats.totalSpent}</div>
-            </div>
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">Giao dịch</div>
-                <div style="font-size:24px;font-weight:700;color:var(--text-primary);margin-top:4px;">1,247</div>
-            </div>
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;">Top chi tiêu</div>
-                <div style="font-size:18px;font-weight:600;color:var(--text-primary);margin-top:4px;">kian_nguyen</div>
-            </div>
-        </div>
-    `;
-}
-
-function loadModeration() {
-    $('moderationStats').innerHTML = `
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;">
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);">⚠️ Cảnh báo</div>
-                <div style="font-size:28px;font-weight:700;color:var(--accent-warning);">89</div>
-            </div>
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);">🔨 Ban</div>
-                <div style="font-size:28px;font-weight:700;color:var(--accent-danger);">12</div>
-            </div>
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);">👢 Kick</div>
-                <div style="font-size:28px;font-weight:700;color:var(--accent-danger);">34</div>
-            </div>
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);">🔇 Mute</div>
-                <div style="font-size:28px;font-weight:700;color:var(--accent-warning);">56</div>
-            </div>
-        </div>
-    `;
-}
-
-function loadLogs() {
-    const tbody = $('logTableBody');
-    if (MOCK.logs.length) {
-        tbody.innerHTML = MOCK.logs.map(l => `
-            <tr>
-                <td style="font-size:12px;color:var(--text-muted);">${l.time}</td>
-                <td><span class="badge badge-purple">${l.action}</span></td>
-                <td>${l.user}</td>
-                <td style="color:var(--text-secondary);">${l.details}</td>
-            </tr>
-        `).join('');
-    } else {
-        tbody.innerHTML = `<tr><td colspan="4"><div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-history"></i><p>Chưa có nhật ký</p></div></td></tr>`;
-    }
-}
-
-function loadCommands() {
-    const grid = $('commandsGrid');
-    const search = $('commandSearch').value.toLowerCase();
-    const filtered = MOCK.commands.filter(c => 
-        c.cmd.toLowerCase().includes(search) || c.desc.toLowerCase().includes(search)
-    );
-    if (filtered.length) {
-        grid.innerHTML = filtered.map(c => `
-            <div class="command-item">
-                <span class="cmd">${c.cmd}</span>
-                <span class="desc">${c.desc}</span>
-            </div>
-        `).join('');
-    } else {
-        grid.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-terminal"></i><p>Không tìm thấy lệnh</p></div>`;
-    }
-}
-
 function loadSettings() {
-    $('maintenanceToggle').checked = localStorage.getItem('maintenance') === 'true';
-    $('lockdownToggle').checked = localStorage.getItem('lockdown') === 'true';
-    $('automodToggle').checked = localStorage.getItem('automod') === 'true';
-    $('imageBlockToggle').checked = localStorage.getItem('imageBlock') === 'true';
+    document.getElementById('maintenanceToggle').checked = localStorage.getItem('maintenance') === 'true';
+    document.getElementById('lockdownToggle').checked = localStorage.getItem('lockdown') === 'true';
+    document.getElementById('automodToggle').checked = localStorage.getItem('automod') === 'true';
+    document.getElementById('imageBlockToggle').checked = localStorage.getItem('imageBlock') === 'true';
+    document.getElementById('filterLinksToggle').checked = localStorage.getItem('filterLinks') === 'true';
+    document.getElementById('autoMuteToggle').checked = localStorage.getItem('autoMute') === 'true';
 }
 
 function saveSettings() {
-    localStorage.setItem('maintenance', $('maintenanceToggle').checked);
-    localStorage.setItem('lockdown', $('lockdownToggle').checked);
-    localStorage.setItem('automod', $('automodToggle').checked);
-    localStorage.setItem('imageBlock', $('imageBlockToggle').checked);
+    localStorage.setItem('maintenance', document.getElementById('maintenanceToggle').checked);
+    localStorage.setItem('lockdown', document.getElementById('lockdownToggle').checked);
+    localStorage.setItem('automod', document.getElementById('automodToggle').checked);
+    localStorage.setItem('imageBlock', document.getElementById('imageBlockToggle').checked);
+    localStorage.setItem('filterLinks', document.getElementById('filterLinksToggle').checked);
+    localStorage.setItem('autoMute', document.getElementById('autoMuteToggle').checked);
     showToast('Đã lưu cài đặt!', 'success');
 }
 
 function resetSettings() {
-    $('maintenanceToggle').checked = false;
-    $('lockdownToggle').checked = false;
-    $('automodToggle').checked = false;
-    $('imageBlockToggle').checked = false;
-    ['maintenance', 'lockdown', 'automod', 'imageBlock'].forEach(k => localStorage.removeItem(k));
+    document.getElementById('maintenanceToggle').checked = false;
+    document.getElementById('lockdownToggle').checked = false;
+    document.getElementById('automodToggle').checked = false;
+    document.getElementById('imageBlockToggle').checked = false;
+    document.getElementById('filterLinksToggle').checked = false;
+    document.getElementById('autoMuteToggle').checked = false;
+    ['maintenance', 'lockdown', 'automod', 'imageBlock', 'filterLinks', 'autoMute'].forEach(k => localStorage.removeItem(k));
     showToast('Đã đặt lại cài đặt!', 'info');
 }
 
-function loadBotStatus() {
-    const status = MOCK.botStatus;
-    $('botStatusContent').innerHTML = `
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;">
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);">Trạng thái</div>
-                <div style="font-size:20px;font-weight:700;color:var(--accent-success);margin-top:4px;">🟢 Online</div>
-            </div>
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);">Uptime</div>
-                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">${status.uptime}</div>
-            </div>
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);">Ping</div>
-                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">${status.ping}</div>
-            </div>
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);">Máy chủ</div>
-                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">${status.guilds}</div>
-            </div>
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);">Người dùng</div>
-                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">${status.users}</div>
-            </div>
-            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-size:12px;color:var(--text-muted);">Bộ nhớ</div>
-                <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-top:4px;">${status.memory}</div>
-            </div>
-        </div>
-    `;
-}
-
 // ============================================
-// EVENT LISTENERS
+// INIT
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
+    // Check saved login
+    if (!checkSavedLogin()) {
+        document.getElementById('loginOverlay').classList.remove('hidden');
+    }
+
+    // Handle OAuth callback
+    handleOAuthCallback();
+
+    // Render sell items
+    renderSellItems();
+
+    // Load settings
+    loadSettings();
+
     // Navigation
     document.querySelectorAll('.sidebar-nav a').forEach(el => {
         el.addEventListener('click', () => navigateTo(el.dataset.page));
     });
 
     // Menu toggle
-    $('menuToggle').addEventListener('click', openSidebar);
-    $('sidebarOverlay').addEventListener('click', closeSidebar);
+    document.getElementById('menuToggle').addEventListener('click', openSidebar);
+    document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
 
     // Dropdown
-    $('dropdownToggle').addEventListener('click', (e) => {
+    document.getElementById('dropdownToggle').addEventListener('click', (e) => {
         e.stopPropagation();
-        $('dropdownMenu').classList.toggle('show');
+        document.getElementById('dropdownMenu').classList.toggle('show');
     });
-    document.addEventListener('click', () => $('dropdownMenu').classList.remove('show'));
+    document.addEventListener('click', () => document.getElementById('dropdownMenu').classList.remove('show'));
 
     // Refresh
-    $('refreshBtn').addEventListener('click', () => {
+    document.getElementById('refreshBtn').addEventListener('click', () => {
         showToast('Đang làm mới...', 'info');
-        loadPageData(state.currentPage);
+        renderSellItems();
     });
 
     // Theme toggle
     let dark = true;
-    $('themeToggle').addEventListener('click', () => {
+    document.getElementById('themeToggle').addEventListener('click', () => {
         dark = !dark;
         const root = document.documentElement;
         if (dark) {
@@ -1722,39 +1607,25 @@ document.addEventListener('DOMContentLoaded', function() {
             root.style.setProperty('--bg-card', '#1a1a2e');
             root.style.setProperty('--text-primary', '#f0f0f5');
             root.style.setProperty('--text-secondary', '#a0a0b8');
-            $('themeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i>';
         } else {
             root.style.setProperty('--bg-primary', '#f0f0f5');
             root.style.setProperty('--bg-secondary', '#ffffff');
             root.style.setProperty('--bg-card', '#ffffff');
             root.style.setProperty('--text-primary', '#1a1a2e');
             root.style.setProperty('--text-secondary', '#4a4a6a');
-            $('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
         }
     });
 
     // Discord Login
-    $('discordLoginBtn').addEventListener('click', loginWithDiscord);
-
-    // Command search
-    $('commandSearch').addEventListener('input', loadCommands);
-
-    // User search
-    $('userSearch').addEventListener('input', loadUsers);
-
-    // Handle OAuth callback
-    handleOAuthCallback();
-
-    // Check if already authenticated via token in session
-    if (!state.isAuthenticated) {
-        showLogin();
-    }
+    document.getElementById('discordLoginBtn').addEventListener('click', loginWithDiscord);
 
     console.log('✅ Vix Community Dashboard loaded!');
-    console.log(`📊 Client ID: ${CONFIG.DISCORD_CLIENT_ID}`);
-    console.log(`🔗 Redirect URI: ${CONFIG.REDIRECT_URI}`);
+    console.log(`✅ Client ID: ${CONFIG.DISCORD_CLIENT_ID}`);
+    console.log(`✅ Redirect URI: ${CONFIG.REDIRECT_URI}`);
 });
 </script>
 
 </body>
-</html>
+</html
